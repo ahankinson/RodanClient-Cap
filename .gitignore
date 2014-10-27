@@ -1,0 +1,6 @@
+Frameworks/*
+Build/*
+Resources/*.cib
+/.XcodeSupport
+
+/RodanNext.xcodeproj
