@@ -7,6 +7,7 @@
 @import <Ratatosk/WLRemoteLink.j>
 
 @global RodanSetRoutesNotification
+@global RodanRoutesHaveFinishedLoadingNotification
 
 /**
     This controller stores and manages all of the
@@ -45,6 +46,8 @@
         server = [mainBundle objectForInfoDictionaryKey:@"ServerHost"];
         authenticationType = [mainBundle objectForInfoDictionaryKey:@"AuthenticationType"];
         refreshRate = [mainBundle objectForInfoDictionaryKey:@"RefreshRate"];
+        
+        [[WLRemoteLink sharedRemoteLink] setDelegate:self];
 
         // Grab the routes from the Rodan server. These are published at the server root.
         [[CPNotificationCenter defaultCenter] addObserver:self
@@ -64,8 +67,9 @@
 
 - (void)setRoutesFromNotification:(id)aNotification
 {
-    console.log('Setting Routes');
     routes = [aNotification object];
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanRoutesHaveFinishedLoadingNotification
+                                                        object:nil]
 }
 
 #pragma mark Routes Helpers
@@ -92,11 +96,17 @@
     }
 }
 
+/**
+ *  Returns the route to the user's authentication status on the server.
+ */
 - (CPURLRequest)statusRoute
 {
     return [CPURLRequest requestWithURL:[[self routes] objectForKey:@"session-status"]];
 }
 
+/**
+ *  Returns the route to log out from the server.
+ */
 - (CPURLRequest)logOutRoute
 {
     return [CPURLRequest requestWithURL:[[self routes] objectForKey:@"session-close"]];
@@ -104,6 +114,11 @@
 
 #pragma mark Ratatosk delegate
 
+/**
+ * @brief Delegate method for the Ratatosk Framework
+ * @details This method is used by the Ratatosk Framework to intercept every
+ *          request and add in routing information.
+ */
 - (void)remoteLink:(WLRemoteLink)aLink willSendRequest:(CPURLRequest)aRequest withDelegate:(id)aDelegate context:(id)aContext
 {
     console.log("WLRemoteLink controller");

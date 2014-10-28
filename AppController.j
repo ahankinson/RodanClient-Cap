@@ -8,6 +8,8 @@
 @import "Controllers/ServerController.j"
 
 RodanSetRoutesNotification = @"RodanSetRoutesNotification";
+RodanRoutesHaveLoadedNotification = @"RodanRoutesHaveLoadedNotification";
+
 RodanMustLogInNotification = @"RodanMustLogInNotification";
 RodanCannotLogInNotification = @"RodanCannotLogInNotification";
 RodanDidLogInNotification = @"RodanDidLogInNotification";
@@ -23,11 +25,6 @@ RodanDidLogInNotification = @"RodanDidLogInNotification";
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
 {
     CPLogRegister(CPLogConsole);
-    [[WLRemoteLink sharedRemoteLink] setDelegate:serverController];
-
-    var aView = [loginViewController view];
-    [aView setFrame:[[theWindow contentView] frame]];
-    [[theWindow contentView] addSubview:aView];
 }
 
 - (void)awakeFromCib
