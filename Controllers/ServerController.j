@@ -67,8 +67,8 @@
     CPLog.debug(@"Establishing Routes from the server");
 
      // Grab the routes from the Rodan server. These are published at the server root.
-    var routesDelegate = [[RoutesDelegate alloc] init];
-    var request = [CPURLRequest requestWithURL:server];
+    var routesDelegate = [[RoutesDelegate alloc] init],
+        request = [CPURLRequest requestWithURL:server];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
 
     [CPURLConnection connectionWithRequest:request delegate:routesDelegate];
@@ -92,8 +92,6 @@
 */
 - (CPURLRequest)authenticationRoute
 {
-    console.log([self routes]);
-
     switch (authenticationType)
     {
         case 'session':
