@@ -13,7 +13,7 @@
 	<key>ServerHost</key>
 	<string>//localhost:8001</string>
 	<key>AuthenticationType</key>
-	<string>session</string>
+	<string>token</string>
 	<key>Debug</key>
 	<true/>
 	<key>RefreshRate</key>
