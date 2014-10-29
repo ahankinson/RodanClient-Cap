@@ -1,6 +1,7 @@
 @import <Foundation/Foundation.j>
 @import <AppKit/AppKit.j>
 @import "Models/Project.j"
+@import "Controllers/LoadingViewController.j"
 @import "Controllers/ProjectViewController.j"
 @import "Controllers/LoginViewController.j"
 @import "Controllers/WorkflowViewController.j"
@@ -21,6 +22,7 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
 @implementation AppController : CPObject
 {
     @outlet     CPWindow                    theWindow;
+    @outlet     LoadingViewController       loadingViewController;
     @outlet     LoginViewController         loginViewController;
     @outlet     ServerController            serverController          @accessors(readonly);
     @outlet     AuthenticationController    authenticationController;
@@ -76,6 +78,13 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
 
     [contentView setSubviews:[contentScrollView]];
 
+    var loadingView = [loadingViewController view];
+
+    [contentScrollView setDocumentView:loadingView];
+    // [loadingView setAutoresizingMask:CPViewWidthSizable];
+    // [loadingView setFrame:[contentScrollView bounds]];
+
+
     CPLog.debug(@"Application finished launching");
 }
 
@@ -94,8 +103,6 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
     var loginView = [loginViewController view];
 
     [contentScrollView setDocumentView:loginView];
-    [loginView setAutoresizingMask:CPViewWidthSizable];
-    [loginView setFrame:[contentScrollView bounds]];
 }
 
 - (void)showProjectChooserView:(CPNotification)aNotification
@@ -105,8 +112,6 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
     var projectView = [projectViewController view];
 
     [contentScrollView setDocumentView:projectView];
-    [projectView setAutoresizingMask:CPViewWidthSizable];
-    [projectView setFrame:[contentScrollView bounds]];
 }
 
 - (void)awakeFromCib
