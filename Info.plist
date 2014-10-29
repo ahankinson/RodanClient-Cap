@@ -13,7 +13,9 @@
 	<key>ServerHost</key>
 	<string>//localhost:8001</string>
 	<key>AuthenticationType</key>
-	<string>token</string>
+	<string>session</string>
+	<key>Debug</key>
+	<true/>
 	<key>RefreshRate</key>
 	<integer>10</integer>
 </dict>
