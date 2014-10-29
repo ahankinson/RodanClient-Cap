@@ -124,6 +124,14 @@
     return [CPURLRequest requestWithURL:[[self routes] objectForKey:@"session-close"]];
 }
 
+/**
+ *  Returns the route for a given name as a URL string.
+ */
+- (CPString)routeForRouteName:(CPString)aName
+{
+    return [[self routes] objectForKey:aName];
+}
+
 #pragma mark Ratatosk delegate
 
 /**

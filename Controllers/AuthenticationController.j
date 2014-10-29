@@ -39,8 +39,12 @@
     {
         CPLog.debug(@"Setting the cookie for session authentication");
 
-        var CSRFToken = [[CPCookie alloc] initWithName:@"csrftoken"];
-        [authURLRequest setValue:[CSRFToken value] forHTTPHeaderField:@"X-CSRFToken"];
+        // if the server controller doesn't have the CSRF Token, set it now.
+        if (![serverController CSRFToken])
+            [serverController setCSRFToken:[[CPCookie alloc] initWithName:@"csrftoken"]];
+
+        [authURLRequest setValue:[[serverController CSRFToken] value]
+              forHTTPHeaderField:@"X-CSRFToken"];
     }
 
     [CPURLConnection connectionWithRequest:authURLRequest delegate:self];
