@@ -7,7 +7,7 @@
 @import <Ratatosk/WLRemoteLink.j>
 
 @global RodanSetRoutesNotification
-@global RodanRoutesHaveFinishedLoadingNotification
+@global RodanRoutesDidFinishLoadingNotification
 
 /**
     This controller stores and manages all of the
@@ -35,6 +35,7 @@
     @outlet     CPString        authenticationType     @accessors;
     @outlet     CPNumber        refreshRate            @accessors;
     @outlet     CPDictionary    routes                 @accessors;
+    @outlet     CPCookie        CSRFToken              @accessors;
 }
 
 - (id)init
@@ -46,29 +47,40 @@
         server = [mainBundle objectForInfoDictionaryKey:@"ServerHost"];
         authenticationType = [mainBundle objectForInfoDictionaryKey:@"AuthenticationType"];
         refreshRate = [mainBundle objectForInfoDictionaryKey:@"RefreshRate"];
-        
+        CSRFToken = [[CPCookie alloc] initWithName:@"csrftoken"];
+
         [[WLRemoteLink sharedRemoteLink] setDelegate:self];
 
-        // Grab the routes from the Rodan server. These are published at the server root.
         [[CPNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(setRoutesFromNotification:)
                                                      name:RodanSetRoutesNotification
                                                    object:nil];
 
-        var routesDelegate = [[RoutesDelegate alloc] init];
-        var request = [CPURLRequest requestWithURL:server];
-        [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-
-        [CPURLConnection connectionWithRequest:request delegate:routesDelegate];
+        CPLog.debug(@"Server Controller initialized");
     }
 
     return self;
 }
 
+- (void)establishRoutes
+{
+    CPLog.debug(@"Establishing Routes from the server");
+
+     // Grab the routes from the Rodan server. These are published at the server root.
+    var routesDelegate = [[RoutesDelegate alloc] init];
+    var request = [CPURLRequest requestWithURL:server];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+
+    [CPURLConnection connectionWithRequest:request delegate:routesDelegate];
+}
+
 - (void)setRoutesFromNotification:(id)aNotification
 {
     routes = [aNotification object];
-    [[CPNotificationCenter defaultCenter] postNotificationName:RodanRoutesHaveFinishedLoadingNotification
+
+    CPLog.debug(@"Routes have been established");
+
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanRoutesDidFinishLoadingNotification
                                                         object:nil]
 }
 
@@ -121,7 +133,14 @@
  */
 - (void)remoteLink:(WLRemoteLink)aLink willSendRequest:(CPURLRequest)aRequest withDelegate:(id)aDelegate context:(id)aContext
 {
-    console.log("WLRemoteLink controller");
+    switch ([[aRequest HTTPMethod] uppercaseString])
+    {
+        case "POST":
+        case "PUT":
+        case "PATCH":
+        case "DELETE":
+            [aRequest setValue:[CSRFToken value] forHTTPHeaderField:"X-CSRFToken"];
+    }
 }
 
 @end
@@ -143,6 +162,8 @@
 */
 - (void)connection:(CPURLConnection)connection didReceiveData:(CPString)data
 {
+    CPLog.debug(@"Routes were received from the server.");
+
     var jsData = JSON.parse(data),
         dictionary = [CPDictionary dictionaryWithJSObject:jsData];
 

@@ -279,7 +279,7 @@
 			<object class="NSCustomObject" id="417564949">
 				<string key="NSClassName">ServerController</string>
 			</object>
-			<object class="NSCustomObject" id="579914980">
+			<object class="NSCustomObject" id="313093874">
 				<string key="NSClassName">AuthenticationController</string>
 			</object>
 		</array>
@@ -368,6 +368,30 @@
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">serverController</string>
+						<reference key="source" ref="635946545"/>
+						<reference key="destination" ref="417564949"/>
+					</object>
+					<int key="connectionID">491</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">authenticationController</string>
+						<reference key="source" ref="635946545"/>
+						<reference key="destination" ref="313093874"/>
+					</object>
+					<int key="connectionID">492</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">projectViewController</string>
+						<reference key="source" ref="635946545"/>
+						<reference key="destination" ref="954878838"/>
+					</object>
+					<int key="connectionID">493</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">serverController</string>
 						<reference key="source" ref="661027212"/>
 						<reference key="destination" ref="417564949"/>
 					</object>
@@ -377,14 +401,14 @@
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">authenticationController</string>
 						<reference key="source" ref="661027212"/>
-						<reference key="destination" ref="579914980"/>
+						<reference key="destination" ref="313093874"/>
 					</object>
 					<int key="connectionID">490</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">serverController</string>
-						<reference key="source" ref="579914980"/>
+						<reference key="source" ref="313093874"/>
 						<reference key="destination" ref="417564949"/>
 					</object>
 					<int key="connectionID">489</int>
@@ -622,7 +646,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">488</int>
-						<reference key="object" ref="579914980"/>
+						<reference key="object" ref="313093874"/>
 						<reference key="parent" ref="0"/>
 					</object>
 				</array>
@@ -670,7 +694,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">490</int>
+			<int key="maxID">493</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -678,14 +702,24 @@
 					<string key="className">AppController</string>
 					<string key="superclassName">NSObject</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="authenticationController">AuthenticationController</string>
 						<string key="loginViewController">LoginViewController</string>
+						<string key="projectViewController">ProjectViewController</string>
 						<string key="serverController">ServerController</string>
 						<string key="theWindow">NSWindow</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="authenticationController">
+							<string key="name">authenticationController</string>
+							<string key="candidateClassName">AuthenticationController</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="loginViewController">
 							<string key="name">loginViewController</string>
 							<string key="candidateClassName">LoginViewController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="projectViewController">
+							<string key="name">projectViewController</string>
+							<string key="candidateClassName">ProjectViewController</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="serverController">
 							<string key="name">serverController</string>
@@ -704,17 +738,20 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">AuthenticationController</string>
 					<string key="superclassName">NSObject</string>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">serverController</string>
-						<string key="NS.object.0">ServerController</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">serverController</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="activeUser">User</string>
+						<string key="serverController">ServerController</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="activeUser">
+							<string key="name">activeUser</string>
+							<string key="candidateClassName">User</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="serverController">
 							<string key="name">serverController</string>
 							<string key="candidateClassName">ServerController</string>
 						</object>
-					</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">../.XcodeSupport/Controllers∕AuthenticationController.h</string>
@@ -783,6 +820,7 @@
 					<string key="className">ServerController</string>
 					<string key="superclassName">NSObject</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="CSRFToken">CPCookie</string>
 						<string key="authenticationToken">NSString</string>
 						<string key="authenticationType">NSString</string>
 						<string key="refreshRate">NSNumber</string>
@@ -790,6 +828,10 @@
 						<string key="server">NSString</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="CSRFToken">
+							<string key="name">CSRFToken</string>
+							<string key="candidateClassName">CPCookie</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="authenticationToken">
 							<string key="name">authenticationToken</string>
 							<string key="candidateClassName">NSString</string>
@@ -814,6 +856,14 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">../.XcodeSupport/Controllers∕ServerController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">User</string>
+					<string key="superclassName">WLRemoteObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../.XcodeSupport/Models∕User.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

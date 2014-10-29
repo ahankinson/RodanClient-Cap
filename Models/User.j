@@ -11,6 +11,7 @@
     BOOL        isStaff     @accessors;
     BOOL        isSuperuser @accessors;
     CPString    email       @accessors;
+    CPString    authenticationToken @accessors;
 }
 
 + (CPArray)remoteProperties
@@ -24,7 +25,8 @@
         ['isStaff', 'is_staff'],
         ['isSuperuser', 'is_superuser'],
         ['email', 'email'],
-        ['groups', 'groups']
+        ['groups', 'groups'],
+        ['authenticationToken', 'token', nil, YES]
     ];
 }
 @end

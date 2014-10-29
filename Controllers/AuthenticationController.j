@@ -20,16 +20,35 @@
 @global RodanCannotLogInNotification
 @global RodanDidLogInNotification
 @global RodanDidLogOutNotification
+@global RodanAuthenticationSuccessNotification
 
 @implementation AuthenticationController : CPObject
 {
     @outlet         ServerController    serverController;
+    @outlet         User                activeUser          @accessors;
+}
+
+- (void)checkAuthenticationStatus
+{
+    CPLog.debug(@"Checking Authentication Status");
+
+    var authURLRequest = [serverController statusRoute];
+    [authURLRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+
+    if ([serverController authenticationType] === 'session')
+    {
+        CPLog.debug(@"Setting the cookie for session authentication");
+
+        var CSRFToken = [[CPCookie alloc] initWithName:@"csrftoken"];
+        [authURLRequest setValue:[CSRFToken value] forHTTPHeaderField:@"X-CSRFToken"];
+    }
+
+    [CPURLConnection connectionWithRequest:authURLRequest delegate:self];
 }
 
 - (void)logInWithUsername:(CPString)aUsername password:(CPString)aPassword
 {
     var authURLRequest = [serverController authenticationRoute];
-    console.log(authURLRequest);
 
     [authURLRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [authURLRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
@@ -47,15 +66,25 @@
 
     switch ([response statusCode])
     {
+        case 200:
+            CPLog.debug(@"Success.");
+            break;
         case 400:
+            CPLog.debug(@"Bad Request");
             [aConnection cancel];
             break;
         case 401:
             // needs to authenticate
+            CPLog.debug(@"User must authenticate");
+            [[CPNotificationCenter defaultCenter] postNotificationName:RodanMustLogInNotification
+                                                                object:nil];
             [aConnection cancel];
             break;
         case 403:
             // forbidden
+            [[CPNotificationCenter defaultCenter] postNotificationName:RodanCannotLogInNotification
+                                                                object:nil];
+            CPLog.debug(@"Forbidden");
             [aConnection cancel];
             break;
         default:
@@ -68,12 +97,18 @@
     CPLog.error(@"An authentication request failed with an error: " + anError);
 }
 
-- (void)connection:(CPURLConnection)aConnection didReceiveResponse:(CPURLResponse)data
+- (void)connection:(CPURLConnection)aConnection didReceiveData:(CPURLResponse)data
 {
-    console.log("Received data");
+    CPLog.debug("Authentication Controller has received data");
+
     if (data)
     {
-        console.log(data);
+        var parsed = JSON.parse(data);
+        [self setActiveUser:[[User alloc] initWithJson:parsed]];
+        [serverController setAuthenticationToken:[[self activeUser] authenticationToken]];
+
+        [[CPNotificationCenter defaultCenter] postNotificationName:RodanAuthenticationSuccessNotification
+                                                            object:nil];
     }
 }
 
