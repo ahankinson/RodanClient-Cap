@@ -4,7 +4,7 @@ download()
 {
     cd Frameworks
     # Ratatosk
-    git clone https://github.com/wireload/Ratatosk.git
+    git clone https://github.com/wireload/Ratatosk.git Ratatosk
 }
 
 build()
