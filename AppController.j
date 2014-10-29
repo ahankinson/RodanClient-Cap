@@ -21,9 +21,9 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
 @implementation AppController : CPObject
 {
     @outlet     CPWindow                    theWindow;
-    @outlet     LoginViewController         loginViewController;    // initialized in the .cib
-    @outlet     ServerController            serverController;       // initialized in the .cib
-    @outlet     AuthenticationController    authenticationController; // initialized in the .cib
+    @outlet     LoginViewController         loginViewController;
+    @outlet     ServerController            serverController          @accessors(readonly);
+    @outlet     AuthenticationController    authenticationController;
     @outlet     ProjectViewController       projectViewController;
 
                 CPScrollView                contentScrollView;
@@ -63,7 +63,7 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
                                                  name:RodanAuthenticationSuccessNotification
                                                object:nil];
 
-    // Establish the server routes. 
+    // Establish the server routes.
     // NB: These calls are asynchronous.
     [serverController establishRoutes];
 
@@ -107,8 +107,6 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
     [contentScrollView setDocumentView:projectView];
     [projectView setAutoresizingMask:CPViewWidthSizable];
     [projectView setFrame:[contentScrollView bounds]];
-
-    console.log([serverController authenticationToken]);
 }
 
 - (void)awakeFromCib
