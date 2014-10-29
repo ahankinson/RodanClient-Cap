@@ -17,6 +17,10 @@
 {
     if (self = [super initWithCibName:@"LoginView" bundle:nil])
     {
+        var shadowView = [[CPShadowView alloc] initWithFrame:[[self view] bounds]];
+        [[self view] addSubview:shadowView];
+        [[self view] setNeedsLayout];
+        [[self view] setNeedsDisplay:YES];
     }
 
     return self;
@@ -24,12 +28,15 @@
 
 - (@action)logIn:(id)aSender
 {
+    CPLog.debug(@"Application Log In");
     [authenticationController logInWithUsername:username password:password];
 }
 
 - (@action)logOut:(id)aSender
 {
-    console.log("log out");
+    CPLog.debug(@"Application Log Out");
+
+    [authenticationController logOut];
 }
 
 #pragma mark - Private Methods -

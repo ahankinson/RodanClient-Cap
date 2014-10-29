@@ -1,6 +1,7 @@
 @import <Foundation/Foundation.j>
 @import <AppKit/AppKit.j>
 @import "Models/Project.j"
+@import "Categories/CPButtonBar+PopupButton.j"
 @import "Controllers/LoadingViewController.j"
 @import "Controllers/ProjectViewController.j"
 @import "Controllers/LoginViewController.j"
@@ -10,18 +11,23 @@
 
 RodanDidFinishLaunching = @"RodanDidFinishLaunching";
 
+RodanRoutesWillStartLoadingNotification = @"RodanRoutesWillStartLoadingNotification";
 RodanSetRoutesNotification = @"RodanSetRoutesNotification";
 RodanRoutesDidFinishLoadingNotification = @"RodanRoutesDidFinishLoadingNotification";
 
 RodanMustLogInNotification = @"RodanMustLogInNotification";
 RodanCannotLogInNotification = @"RodanCannotLogInNotification";
 RodanDidLogInNotification = @"RodanDidLogInNotification";
+RodanDidLogOutNotification = @"RodanDidLogOutNotification";
 RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotification";
+
+RodanMenubarAndToolbarAreReadyNotification = @"RodanMenubarAndToolbarAreReadyNotification";
 
 
 @implementation AppController : CPObject
 {
     @outlet     CPWindow                    theWindow;
+    @outlet     CPToolbar                   theToolbar;
     @outlet     LoadingViewController       loadingViewController;
     @outlet     LoginViewController         loginViewController;
     @outlet     ServerController            serverController          @accessors(readonly);
@@ -38,6 +44,13 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
     if (!debug)
     {
         CPLogRegister(CPLogConsole, "info");
+
+        // this gets annoying on a dev machine.
+        window.onbeforeunload = function()
+        {
+            return "This will terminate the Application. Are you sure you want to leave?";
+        }
+
     }
     else
     {
@@ -48,6 +61,10 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
     /*
         Start the Rodan startup process
     */
+
+    // hide the toolbar until we're authenticated
+     [CPMenu setMenuBarVisible:NO];
+     [theToolbar setVisible:NO];
 
     // Register the callback methods for when the routes have finished loading.
     [[CPNotificationCenter defaultCenter] addObserver:self
@@ -61,8 +78,28 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
                                                object:nil];
 
     [[CPNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(showProjectChooserView:)
+                                             selector:@selector(showProjectView:)
+                                                 name:RodanMenubarAndToolbarAreReadyNotification
+                                               object:nil];
+
+    [[CPNotificationCenter defaultCenter] addObserver:loadingViewController
+                                             selector:@selector(updateProgressAndStatus:)
+                                                 name:RodanRoutesWillStartLoadingNotification
+                                               object:nil];
+
+    [[CPNotificationCenter defaultCenter] addObserver:loadingViewController
+                                             selector:@selector(updateProgressAndStatus:)
+                                                 name:RodanRoutesDidFinishLoadingNotification
+                                               object:nil];
+
+    [[CPNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(enableMenubarAndToolbarOnAuthentication:)
                                                  name:RodanAuthenticationSuccessNotification
+                                               object:nil];
+
+    [[CPNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(cleanUpApplicationAfterLogout:)
+                                                 name:RodanDidLogOutNotification
                                                object:nil];
 
     // Establish the server routes.
@@ -78,7 +115,13 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
 
     [contentView setSubviews:[contentScrollView]];
 
-    var loadingView = [loadingViewController view];
+    var loadingView = [loadingViewController view],
+        loadingViewMidX = CGRectGetWidth([loadingView frame]) / 2,
+        loadingViewMidY = CGRectGetHeight([loadingView frame]) / 2,
+        scrollViewCenter = [contentScrollView center];
+
+    [loadingView setFrameOrigin:CGPointMake(scrollViewCenter.x - loadingViewMidX, scrollViewCenter.y - loadingViewMidY)];
+    [loadingView setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
 
     [contentScrollView setDocumentView:loadingView];
     // [loadingView setAutoresizingMask:CPViewWidthSizable];
@@ -86,6 +129,25 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
 
 
     CPLog.debug(@"Application finished launching");
+}
+
+- (void)enableMenubarAndToolbarOnAuthentication:(CPNotification)aNotification
+{
+     [CPMenu setMenuBarVisible:YES];
+     [theToolbar setVisible:YES];
+
+     [[CPNotificationCenter defaultCenter] postNotificationName:RodanMenubarAndToolbarAreReadyNotification
+                                                         object:nil];
+}
+
+- (void)cleanUpApplicationAfterLogout:(CPNotification)aNotification
+{
+    [CPMenu setMenuBarVisible:NO];
+    [theToolbar setVisible:NO];
+
+    // after cleanup trigger the log-in process again.
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanMustLogInNotification
+                                                        object:nil];
 }
 
 /**
@@ -100,17 +162,29 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
 {
     CPLog.debug(@"Show Login Window View");
 
-    var loginView = [loginViewController view];
+    var loginView = [loginViewController view],
+        loginViewMidX = CGRectGetWidth([loginView frame]) / 2,
+        loginViewMidY = CGRectGetHeight([loginView frame]) / 2,
+        scrollViewCenter = [contentScrollView center];
 
+    console.log(loginViewMidX);
+    console.log(scrollViewCenter);
+
+    [loginView setFrameOrigin:CGPointMake(scrollViewCenter.x - loginViewMidX, scrollViewCenter.y - loginViewMidY)];
+    [loginView setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
     [contentScrollView setDocumentView:loginView];
 }
 
-- (void)showProjectChooserView:(CPNotification)aNotification
+- (void)showProjectView:(CPNotification)aNotification
 {
     CPLog.debug(@"Show Project Chooser View");
-
+    /*
+        The notification calls this *after* the menubar and toolbar have been
+        drawn, since their presence affects the drawing of any subviews.
+    */
     var projectView = [projectViewController view];
-
+    [projectView setFrame:[contentScrollView bounds]];
+    [projectView setAutoresizingMask:CPViewWidthSizable];
     [contentScrollView setDocumentView:projectView];
 }
 

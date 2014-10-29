@@ -8,15 +8,12 @@
 
 @global RodanSetRoutesNotification
 @global RodanRoutesDidFinishLoadingNotification
+@global RodanRoutesWillStartLoadingNotification
 
 /**
     This controller stores and manages all of the
     information required for communication with the Rodan
     server.
-
-    Reads the configuration options from the app's Info.plist
-    and makes them accessible to the rest of the application
-    in a convenient and friendly way.
 
     @property server
     @brief    The URL to the Rodan server instance
@@ -36,6 +33,7 @@
     @outlet     CPNumber        refreshRate            @accessors;
     @outlet     CPDictionary    routes                 @accessors;
     @outlet     CPCookie        CSRFToken              @accessors;
+    @outlet     User            activeUser             @accessors;
 }
 
 - (id)init
@@ -62,9 +60,16 @@
     return self;
 }
 
+
+/**
+ *  Queries the root of the Rodan server for the routes to the various
+ *  REST endpoints.
+ */
 - (void)establishRoutes
 {
     CPLog.debug(@"Establishing Routes from the server");
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanRoutesWillStartLoadingNotification
+                                                        object:nil];
 
      // Grab the routes from the Rodan server. These are published at the server root.
     var routesDelegate = [[RoutesDelegate alloc] init],
@@ -145,7 +150,16 @@
         case "PUT":
         case "PATCH":
         case "DELETE":
-            [aRequest setValue:[CSRFToken value] forHTTPHeaderField:"X-CSRFToken"];
+            if (authenticationType === 'session')
+            {
+                [aRequest setValue:[CSRFToken value] forHTTPHeaderField:@"X-CSRFToken"];
+            }
+            else
+            {
+                //token auth
+                [aRequest setValue:authenticationToken forHTTPHeaderField:@"Authorization"];
+            }
+            break;
     }
 }
 
