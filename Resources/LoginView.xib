@@ -6,7 +6,6 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="LoginViewController">
             <connections>
-                <outlet property="fooArrayController" destination="qvD-OX-UI7" id="aH8-o6-cST"/>
                 <outlet property="loginButton" destination="k5p-nl-Ogh" id="gHE-F8-z5K"/>
                 <outlet property="password" destination="3TX-27-BeM" id="Dr7-Xa-rqu"/>
                 <outlet property="statusLabel" destination="jXU-Id-nZW" id="1fV-tA-IKF"/>
@@ -93,7 +92,6 @@
             </subviews>
             <point key="canvasLocation" x="307.5" y="327"/>
         </view>
-        <arrayController id="qvD-OX-UI7"/>
     </objects>
     <resources>
         <image name="RodanLogo" width="473" height="123"/>
