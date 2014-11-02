@@ -2,6 +2,7 @@
 @import <AppKit/AppKit.j>
 @import "Models/Project.j"
 @import "Categories/CPButtonBar+PopupButton.j"
+@import "Categories/CPURLConnection+AsyncBlock.j"
 @import "Controllers/LoadingViewController.j"
 @import "Controllers/ProjectViewController.j"
 @import "Controllers/LoginViewController.j"
@@ -17,6 +18,7 @@ RodanRoutesDidFinishLoadingNotification = @"RodanRoutesDidFinishLoadingNotificat
 
 RodanMustLogInNotification = @"RodanMustLogInNotification";
 RodanCannotLogInNotification = @"RodanCannotLogInNotification";
+RodanFailedLogInNotification = @"RodanFailedLogInNotification";
 RodanDidLogInNotification = @"RodanDidLogInNotification";
 RodanDidLogOutNotification = @"RodanDidLogOutNotification";
 RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotification";
@@ -166,9 +168,6 @@ RodanMenubarAndToolbarAreReadyNotification = @"RodanMenubarAndToolbarAreReadyNot
         loginViewMidX = CGRectGetWidth([loginView frame]) / 2,
         loginViewMidY = CGRectGetHeight([loginView frame]) / 2,
         scrollViewCenter = [contentScrollView center];
-
-    console.log(loginViewMidX);
-    console.log(scrollViewCenter);
 
     [loginView setFrameOrigin:CGPointMake(scrollViewCenter.x - loginViewMidX, scrollViewCenter.y - loginViewMidY)];
     [loginView setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
