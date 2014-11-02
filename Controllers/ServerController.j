@@ -76,14 +76,30 @@
         request = [CPURLRequest requestWithURL:server];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
 
-    [CPURLConnection connectionWithRequest:request delegate:routesDelegate];
+    var completionHandler = function(response, data, error)
+    {
+        if (data !== nil && [response statusCode] === 200)
+        {
+            CPLog.debug(@"Routes were received from the server.");
+
+            var jsData = JSON.parse(data),
+                dictionary = [CPDictionary dictionaryWithJSObject:jsData];
+
+            // The ServerController's setRoutes: method is subscribed to this notification
+            [[CPNotificationCenter defaultCenter] postNotificationName:RodanSetRoutesNotification
+                                                                object:dictionary];
+        }
+    }
+
+    [CPURLConnection sendAsynchronousRequest:request
+                                       queue:[CPOperationQueue mainQueue]
+                           completionHandler:completionHandler];
 }
 
 - (void)setRoutesFromNotification:(id)aNotification
 {
-    routes = [aNotification object];
-
     CPLog.debug(@"Routes have been established");
+    routes = [aNotification object];
 
     [[CPNotificationCenter defaultCenter] postNotificationName:RodanRoutesDidFinishLoadingNotification
                                                         object:nil]
@@ -161,35 +177,6 @@
             }
             break;
     }
-}
-
-@end
-
-
-@implementation RoutesDelegate : CPObject
-{
-}
-
-/**
-    @TODO: Implement error checking
-*/
-- (void)connection:(CPURLConnection)connection didReceiveResponse:(CPHTTPURLResponse)response
-{
-}
-
-/**
-    The response to the fetch routes command goes through here.
-*/
-- (void)connection:(CPURLConnection)connection didReceiveData:(CPString)data
-{
-    CPLog.debug(@"Routes were received from the server.");
-
-    var jsData = JSON.parse(data),
-        dictionary = [CPDictionary dictionaryWithJSObject:jsData];
-
-    // The ServerController's setRoutes: method is subscribed to this notification
-    [[CPNotificationCenter defaultCenter] postNotificationName:RodanSetRoutesNotification
-                                                        object:dictionary];
 }
 
 @end

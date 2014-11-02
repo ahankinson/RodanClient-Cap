@@ -47,10 +47,36 @@
               forHTTPHeaderField:@"X-CSRFToken"];
     }
 
-    var authStatusDelegate = [[AuthStatusDelegate alloc] init];
-    [authStatusDelegate setServerController:serverController];
+    var completionHandler = function(response, data, error)
+    {
+        switch ([response statusCode])
+        {
+            case 200:
+                CPLog.debug(@"Success; User must already be logged in.");
+                break;
+            case 400:
+                CPLog.debug(@"Bad Auth Status Request.");
+                break;
+            case 401:
+                // needs to authenticate
+                CPLog.debug(@"User must authenticate");
+                [[CPNotificationCenter defaultCenter] postNotificationName:RodanMustLogInNotification
+                                                                    object:nil];
+                break;
+            case 403:
+                // forbidden
+                CPLog.debug(@"Forbidden");
+                [[CPNotificationCenter defaultCenter] postNotificationName:RodanCannotLogInNotification
+                                                                    object:nil];
+                break;
+            default:
+                CPLog.error(@"An uncaught error code was returned during Authentication: " + [response statusCode]);
+        }
+    };
 
-    [CPURLConnection connectionWithRequest:authURLRequest delegate:authStatusDelegate];
+    [CPURLConnection sendAsynchronousRequest:authURLRequest
+                                       queue:[CPOperationQueue mainQueue]
+                                       completionHandler:completionHandler];
 }
 
 - (void)logInWithUsername:(CPString)aUsername password:(CPString)aPassword
@@ -62,10 +88,47 @@
     [authURLRequest setHTTPBody:@"username=" + [aUsername objectValue] + "&password=" + [aPassword objectValue]];
     [authURLRequest setHTTPMethod:@"POST"];
 
-    var logInDelegate = [[LogInDelegate alloc] init];
-    [logInDelegate setServerController:serverController];
+    // this callback function handles the response from the server.
+    var completionHandler = function(response, data, error)
+    {
+        switch ([response statusCode])
+        {
+            case 200:
+                CPLog.debug(@"Success.");
+                var parsed = JSON.parse(data);
+                [serverController setActiveUser:[[User alloc] initWithJson:parsed]];
+                [serverController setAuthenticationToken:@"Token " + [[serverController activeUser] authenticationToken]];
 
-    [CPURLConnection connectionWithRequest:authURLRequest delegate:logInDelegate];
+                [[CPNotificationCenter defaultCenter] postNotificationName:RodanAuthenticationSuccessNotification
+                                                                    object:nil];
+                break;
+            case 400:
+                CPLog.debug(@"Bad Request");
+                break;
+            case 401:
+                // needs to authenticate
+                CPLog.debug(@"User must authenticate");
+                // Warn listeners that the attempt to authenticated with a 401, then allow the user to try again.
+                [[CPNotificationCenter defaultCenter] postNotificationName:RodanFailedLogInNotification
+                                                                    object:nil];
+
+                [[CPNotificationCenter defaultCenter] postNotificationName:RodanMustLogInNotification
+                                                                    object:nil];
+                break;
+            case 403:
+                // forbidden
+                [[CPNotificationCenter defaultCenter] postNotificationName:RodanCannotLogInNotification
+                                                                    object:nil];
+                CPLog.debug(@"Forbidden");
+                break;
+            default:
+                CPLog.error(@"An uncaught error code was returned during Authentication: " + [response statusCode]);
+        }
+    };
+
+    [CPURLConnection sendAsynchronousRequest:authURLRequest
+                                       queue:[CPOperationQueue mainQueue]
+                           completionHandler:completionHandler];
 }
 
 - (void)logOut
@@ -74,181 +137,46 @@
     [logoutURLRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
 
     if ([serverController authenticationType] === 'session')
-    {
         [logoutURLRequest setValue:[[serverController CSRFToken] value] forHTTPHeaderField:@"X-CSRFToken"];
-    }
     else
-    {
         [logoutURLRequest setValue:[serverController authenticationToken] forHTTPHeaderField:@"Authorization"];
-    }
 
     [logoutURLRequest setHTTPMethod:@"POST"];
 
-    var logOutDelegate = [[LogOutDelegate alloc] init];
-    [logOutDelegate setServerController:serverController];
+    var completionHandler = function(response, data, error)
+    {
+        switch ([response statusCode])
+        {
+            case 200:
+                CPLog.debug(@"Success.");
+                [[CPNotificationCenter defaultCenter] postNotificationName:RodanDidLogOutNotification
+                                                    object:nil];
+                break;
+            case 400:
+                CPLog.debug(@"Bad Request");
+                break;
+            case 401:
+                // needs to authenticate
+                CPLog.debug(@"User must authenticate");
+                [[CPNotificationCenter defaultCenter] postNotificationName:RodanMustLogInNotification
+                                                                    object:nil];
+                break;
+            case 403:
+                // forbidden
+                [[CPNotificationCenter defaultCenter] postNotificationName:RodanCannotLogInNotification
+                                                                    object:nil];
+                CPLog.debug(@"Forbidden");
+                break;
+            default:
+                CPLog.error(@"An uncaught error code was returned during Authentication: " + [response statusCode]);
+        }
+    };
 
-    [CPURLConnection connectionWithRequest:logoutURLRequest delegate:logOutDelegate];
+    [CPURLConnection sendAsynchronousRequest:logoutURLRequest
+                                    queue:[CPOperationQueue mainQueue]
+                                    completionHandler:completionHandler];
 }
 
 @end
 
-
-@implementation AuthStatusDelegate : CPObject
-{
-    ServerController    serverController    @accessors;
-}
-
-- (void)connection:(CPURLConnection)aConnection didReceiveResponse:(CPURLResponse)response
-{
-    switch ([response statusCode])
-    {
-        case 200:
-            CPLog.debug(@"Success.");
-            break;
-        case 400:
-            CPLog.debug(@"Bad Request");
-            [aConnection cancel];
-            break;
-        case 401:
-            // needs to authenticate
-            CPLog.debug(@"User must authenticate");
-            [[CPNotificationCenter defaultCenter] postNotificationName:RodanMustLogInNotification
-                                                                object:nil];
-            [aConnection cancel];
-            break;
-        case 403:
-            // forbidden
-            [[CPNotificationCenter defaultCenter] postNotificationName:RodanCannotLogInNotification
-                                                                object:nil];
-            CPLog.debug(@"Forbidden");
-            [aConnection cancel];
-            break;
-        default:
-            CPLog.error(@"An uncaught error code was returned during Authentication: " + [response statusCode]);
-    }
-}
-
-- (void)connection:(CPURLConnection)aConnection didFailWithError:(id)anError
-{
-    CPLog.error(@"An authentication request failed with an error: " + anError);
-}
-
-- (void)connection:(CPURLConnection)aConnection didReceiveData:(CPURLResponse)data
-{
-}
-
-
-@end
-
-
-@implementation LogInDelegate : CPObject
-{
-    ServerController    serverController    @accessors;
-}
-
-- (void)connection:(CPURLConnection)aConnection didReceiveResponse:(CPURLResponse)response
-{
-    CPLog.debug(@"Received a status code of " + [response statusCode]);
-
-    switch ([response statusCode])
-    {
-        case 200:
-            CPLog.debug(@"Success.");
-            break;
-        case 400:
-            CPLog.debug(@"Bad Request");
-            [aConnection cancel];
-            break;
-        case 401:
-            // needs to authenticate
-            CPLog.debug(@"User must authenticate");
-            // Warn listeners that the attempt to authenticated with a 401, then allow the user to try again.
-            [[CPNotificationCenter defaultCenter] postNotificationName:RodanFailedLogInNotification
-                                                                object:nil];
-
-            [[CPNotificationCenter defaultCenter] postNotificationName:RodanMustLogInNotification
-                                                                object:nil];
-            [aConnection cancel];
-            break;
-        case 403:
-            // forbidden
-            [[CPNotificationCenter defaultCenter] postNotificationName:RodanCannotLogInNotification
-                                                                object:nil];
-            CPLog.debug(@"Forbidden");
-            [aConnection cancel];
-            break;
-        default:
-            CPLog.error(@"An uncaught error code was returned during Authentication: " + [response statusCode]);
-    }
-}
-
-- (void)connection:(CPURLConnection)aConnection didFailWithError:(id)anError
-{
-    CPLog.error(@"An authentication request failed with an error: " + anError);
-}
-
-- (void)connection:(CPURLConnection)aConnection didReceiveData:(CPURLResponse)data
-{
-    CPLog.debug("Log In Delegate has received data");
-    if (data)
-    {
-        var parsed = JSON.parse(data);
-        [serverController setActiveUser:[[User alloc] initWithJson:parsed]];
-        [serverController setAuthenticationToken:@"Token " + [[serverController activeUser] authenticationToken]];
-
-        [[CPNotificationCenter defaultCenter] postNotificationName:RodanAuthenticationSuccessNotification
-                                                            object:nil];
-    }
-}
-
-@end
-
-@implementation LogOutDelegate : CPObject
-{
-    ServerController    serverController    @accessors;
-}
-
-- (void)connection:(CPURLConnection)aConnection didReceiveResponse:(CPURLResponse)response
-{
-    switch ([response statusCode])
-    {
-        case 200:
-            CPLog.debug(@"Success.");
-            break;
-        case 400:
-            CPLog.debug(@"Bad Request");
-            [aConnection cancel];
-            break;
-        case 401:
-            // needs to authenticate
-            CPLog.debug(@"User must authenticate");
-            [[CPNotificationCenter defaultCenter] postNotificationName:RodanMustLogInNotification
-                                                                object:nil];
-            [aConnection cancel];
-            break;
-        case 403:
-            // forbidden
-            [[CPNotificationCenter defaultCenter] postNotificationName:RodanCannotLogInNotification
-                                                                object:nil];
-            CPLog.debug(@"Forbidden");
-            [aConnection cancel];
-            break;
-        default:
-            CPLog.error(@"An uncaught error code was returned during Authentication: " + [response statusCode]);
-    }
-}
-
-- (void)connection:(CPURLConnection)aConnection didFailWithError:(id)anError
-{
-}
-
-- (void)connection:(CPURLConnection)aConnection didReceiveData:(CPURLResponse)data
-{
-    CPLog.debug(@"Log out delegate has received data");
-
-    [[CPNotificationCenter defaultCenter] postNotificationName:RodanDidLogOutNotification
-                                                        object:nil];
-}
-
-@end
 
