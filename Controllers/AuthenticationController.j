@@ -17,6 +17,7 @@
 @import "ServerController.j"
 
 @global RodanMustLogInNotification
+@global RodanFailedLogInNotification
 @global RodanCannotLogInNotification
 @global RodanDidLogInNotification
 @global RodanDidLogOutNotification
@@ -91,6 +92,7 @@
 
 @end
 
+
 @implementation AuthStatusDelegate : CPObject
 {
     ServerController    serverController    @accessors;
@@ -160,6 +162,10 @@
         case 401:
             // needs to authenticate
             CPLog.debug(@"User must authenticate");
+            // Warn listeners that the attempt to authenticated with a 401, then allow the user to try again.
+            [[CPNotificationCenter defaultCenter] postNotificationName:RodanFailedLogInNotification
+                                                                object:nil];
+
             [[CPNotificationCenter defaultCenter] postNotificationName:RodanMustLogInNotification
                                                                 object:nil];
             [aConnection cancel];
