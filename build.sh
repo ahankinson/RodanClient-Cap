@@ -1,10 +1,15 @@
 #!/bin/bash
 
-download()
+download_and_install()
 {
     cd Frameworks
     # Ratatosk
     git clone https://github.com/wireload/Ratatosk.git Ratatosk
+    mkdir Source
+    cd Source
+    ln -s ../Ratatosk .
+    cd ../Debug
+    ln -s ../Ratatosk .
 }
 
 build()
@@ -31,14 +36,14 @@ run()
 }
 
 case "$1" in
-    "download" ) download;;
+    "install" ) download_and_install;;
     "test" ) test;;
     "build" ) build;;
     "br" ) build_test_and_run;;
     "run" ) run;;
     * )
         echo "Build options:"
-        echo "    download              - Downloads the external framework dependencies"
+        echo "    install               - Downloads the external framework dependencies and installs them"
         echo "    test                  - Runs the Unit tests"
         echo "    build                 - Builds the framework for deployment"
         echo "    br                    - Run the unit tests, build and then run a Python webserver on the built instance"
