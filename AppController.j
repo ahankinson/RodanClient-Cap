@@ -35,6 +35,7 @@ RodanMenubarAndToolbarAreReadyNotification = @"RodanMenubarAndToolbarAreReadyNot
     @outlet     ServerController            serverController          @accessors(readonly);
     @outlet     AuthenticationController    authenticationController;
     @outlet     ProjectViewController       projectViewController;
+    @outlet     CPArrayController           projectArrayController    @accessors;
 
                 CPScrollView                contentScrollView;
 }

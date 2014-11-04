@@ -88,6 +88,15 @@
     [authURLRequest setHTTPBody:@"username=" + [aUsername objectValue] + "&password=" + [aPassword objectValue]];
     [authURLRequest setHTTPMethod:@"POST"];
 
+    if ([serverController authenticationType] === 'session')
+    {
+        if (![serverController CSRFToken])
+            [serverController setCSRFToken:[[CPCookie alloc] initWithName:@"csrftoken"]];
+
+        [authURLRequest setValue:[[serverController CSRFToken] value]
+              forHTTPHeaderField:@"X-CSRFToken"];
+    }
+
     // this callback function handles the response from the server.
     var completionHandler = function(response, data, error)
     {
@@ -108,6 +117,7 @@
             case 401:
                 // needs to authenticate
                 CPLog.debug(@"User must authenticate");
+
                 // Warn listeners that the attempt to authenticated with a 401, then allow the user to try again.
                 [[CPNotificationCenter defaultCenter] postNotificationName:RodanFailedLogInNotification
                                                                     object:nil];

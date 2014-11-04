@@ -13,9 +13,6 @@
     @outlet         CPSecureTextField           password;
     @outlet         CPButton                    loginButton;
     @outlet         CPTextField                 statusLabel                 @accessors;
-
-    @outlet         CPArrayController           fooArrayController;
-
 }
 
 - (id)init

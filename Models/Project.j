@@ -1,11 +1,20 @@
 @import <Ratatosk/WLRemoteObject.j>
+@import <Ratatosk/WLRemoteTransformers.j>
 
 @implementation Project : WLRemoteObject
 {
-    CPString    projectName     @accessors;
-    CPString    projectCreator  @accessors;
+    CPString    uuid                @accessors;
+    CPString    pk                  @accessors;
+    CPString    projectName         @accessors;
+    CPString    projectCreator      @accessors;
+    CPString    projectDescription  @accessors;
+    CPObject    projectOwner        @accessors;
+    CPString    resourceURI         @accessors;
+    // CPArray     pages               @accessors;
+    CPDate      created             @accessors;
+    CPDate      updated             @accessors;
 
-    CPString    route           @accessors(readonly);
+    CPString    route               @accessors(readonly);
 }
 
 - (id)init
@@ -13,8 +22,17 @@
     if (self = [super init])
     {
         route = @"projects";
-
         projectName = @"Untitled Project";
+    }
+
+    return self;
+}
+
+- (id)initWithCreator:(User)aCreator
+{
+    if (self = [self init])
+    {
+        projectCreator = aCreator;
     }
 
     return self;
@@ -26,7 +44,11 @@
         ['uuid', 'uuid'],
         ['pk', 'url'],
         ['projectName', 'name'],
-        ['projectCreator', 'creator']
+        ['projectDescription', 'description'],
+        ['projectCreator', 'creator'],
+        // ['pages', 'pages', [WLForeignObjectsTransformer forObjectClass:Page]],
+        ['created', 'created', [[WLDateTransformer alloc] init], true],
+        ['updated', 'updated', [[WLDateTransformer alloc] init], true]
     ];
 }
 

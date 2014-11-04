@@ -72,8 +72,7 @@
                                                         object:nil];
 
      // Grab the routes from the Rodan server. These are published at the server root.
-    var routesDelegate = [[RoutesDelegate alloc] init],
-        request = [CPURLRequest requestWithURL:server];
+    var request = [CPURLRequest requestWithURL:server];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
 
     var completionHandler = function(response, data, error)

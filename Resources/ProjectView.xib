@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6245"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ProjectViewController">
             <connections>
-                <outlet property="projectAddRemoveButtonBar" destination="c3Q-IL-bxW" id="maC-2M-eeK"/>
-                <outlet property="projectList" destination="KiQ-uy-YKX" id="oLK-Ef-rNk"/>
-                <outlet property="view" destination="ZjU-bp-CRg" id="cO6-2C-k2m"/>
+                <outlet property="projectAddRemoveButtonBar" destination="c3Q-IL-bxW" id="6Yk-Ae-wD6"/>
+                <outlet property="projectList" destination="KiQ-uy-YKX" id="rNp-ca-eQg"/>
+                <outlet property="projectListCellView" destination="LZP-uz-tuf" id="eXz-MJ-nAe"/>
+                <outlet property="projectListProjectDescription" destination="6kn-8t-9dV" id="wDI-nZ-K5S"/>
+                <outlet property="projectListProjectName" destination="gp9-8y-LCo" id="o7x-gg-teA"/>
+                <outlet property="view" destination="ZjU-bp-CRg" id="fBv-Zm-ewE"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
@@ -37,7 +40,6 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="98" rowSizeStyle="automatic" viewBased="YES" id="KiQ-uy-YKX">
-                                                <rect key="frame" x="0.0" y="0.0" width="238" height="117"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <size key="intercellSpacing" width="3" height="2"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -72,16 +74,13 @@
                                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" id="6kn-8t-9dV">
                                                                         <rect key="frame" x="1" y="3" width="294" height="67"/>
                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Description" id="YDk-m7-kxQ">
+                                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Description" id="YDk-m7-kxQ">
                                                                             <font key="font" metaFont="system"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
                                                                     </textField>
                                                                 </subviews>
-                                                                <connections>
-                                                                    <outlet property="textField" destination="gp9-8y-LCo" id="0CU-WY-hQm"/>
-                                                                </connections>
                                                             </tableCellView>
                                                         </prototypeCellViews>
                                                     </tableColumn>
