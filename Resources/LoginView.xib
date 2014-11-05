@@ -66,6 +66,7 @@
                         </allowedInputSourceLocales>
                     </secureTextFieldCell>
                     <connections>
+                        <action selector="logIn:" target="-2" id="7Yc-GN-bFX"/>
                         <outlet property="nextKeyView" destination="Bc2-Nt-qqP" id="DJy-6h-Gha"/>
                     </connections>
                 </secureTextField>
@@ -86,7 +87,7 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
-                        <action selector="logIn:" target="-2" id="yfU-Pr-zqy"/>
+                        <action selector="logIn:" target="-2" id="GE9-8P-Vv9"/>
                     </connections>
                 </button>
             </subviews>

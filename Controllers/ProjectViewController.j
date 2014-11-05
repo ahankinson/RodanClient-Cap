@@ -2,6 +2,7 @@
 @import "../Categories/CPButtonBar+PopupButton.j"
 @import "ProjectController.j"
 
+@global RodanDidLoadProjectsNotification
 
 @implementation ProjectViewController : CPViewController
 {
@@ -10,18 +11,27 @@
     @outlet     CPButtonBar             projectAddRemoveButtonBar;
     @outlet     CPTableView             projectList;
 
-    @outlet     CPTableCellView         projectListCellView;
-    @outlet     CPTextField             projectListProjectName;
-    @outlet     CPTextField             projectListProjectDescription;
+    @outlet     CPTextField             projectName;
+    @outlet     CPTextField             projectCreated;
 }
 
 - (id)init
 {
     if (self = [super initWithCibName:@"ProjectView" bundle:nil owner:self])
     {
+        [[CPNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(refreshProjectList:)
+                                                     name:RodanDidLoadProjectsNotification
+                                                   object:nil];
     }
 
     return self;
+}
+
+- (void)refreshProjectList:(CPNotification)aNotification
+{
+    CPLog.debug(@"Reloading the project list");
+    [projectList reloadData];
 }
 
 - (void)viewDidLoad
@@ -44,19 +54,19 @@
               withKeyPath:@"selectedObjects.@count"
                   options:nil];
 
-        var tableViewDelegate = [[ProjectListTableViewDelegate alloc] initWithArrayController:projectArrayController];
-        [projectList setDelegate:tableViewDelegate];
-        [projectList setDataSource:tableViewDelegate];
+        // set up the delegate for the tableview
+        var delegate = [[ProjectListTableViewDelegate alloc] initWithProjectController:projectController];
+        [projectList setDelegate:delegate];
+        [projectList setDataSource:delegate];
+
+        [projectName bind:@"value"
+                 toObject:projectArrayController
+              withKeyPath:@"selection.projectName"
+                  options:nil];
 
         // this will fetch the first page of projects
         CPLog.debug(@"Loading Projects...");
-
-        // ensure the project array controller knows about object it will be
-        // representing.
-        [projectArrayController setRepresentedObject:Project];
-        [projectArrayController loadRowsForPage:1
-                                      withRoute:@"projects"];
-
+        [projectController loadProjectsOnPage:1];
 }
 
 - (@action)createNewProject:(id)aSender
@@ -103,15 +113,14 @@
  */
 @implementation ProjectListTableViewDelegate : CPObject
 {
-    PaginatedArrayController  projectArrayController          @accessors;
-    CPInteger                 totalNumberOfProjects           @accessors;
+    ProjectController       theProjectController        @accessors;
 }
 
-- (id)initWithArrayController:(CPArrayController)anArrayController
+- (id)initWithProjectController:(ProjectController)aController
 {
     if (self = [super init])
     {
-        projectArrayController = anArrayController;
+        theProjectController = aController;
     }
 
     return self;
@@ -120,23 +129,60 @@
 - (int)numberOfRowsInTableView:(CPTableView)aTableView
 {
     CPLog.debug("Project TableView: numberOfRowsInTableView:");
-    return [projectArrayController totalObjects];  // debug
+    return [theProjectController numberOfProjects];  // debug
 }
 
-- (id)tableView:(CPTableView)aTableView objectValueForTableColumn:(CPTableColumn)aTableColumn row:(CPInteger)aRowIndex
-{
-    CPLog.debug("Project TableView: objectValueForTableColumn:row")
-}
+// - (id)tableView:(CPTableView)aTableView objectValueForTableColumn:(CPTableColumn)aTableColumn row:(CPInteger)aRowIndex
+// {
+//     CPLog.debug("Project TableView: objectValueForTableColumn:row")
+// }
 
 - (CPView)tableView:(CPTableView)tableView viewForTableColumn:(CPTableColumn)aTableColumn row:(CPInteger)aRowIndex
 {
     CPLog.debug("Project TableView: viewForTableColumn:row");
-    //[projectArrayController shouldLoadPageForRow:aRowIndex];
+
+    var projectContentArray = [[theProjectController projectArrayController] contentArray],
+        representedProject = nil;
+
+    try
+    {
+        representedProject = [projectContentArray objectAtIndex:aRowIndex];
+    }
+    catch (CPRangeExeception)
+    {
+        // the first page is page 1, but that creates 
+        var objectsPerPage = [theProjectController objectsPerPage],
+            page = Math.ceil(aRowIndex / (objectsPerPage - 1));
+
+        CPLog.debug(@"Row " + aRowIndex + " is on (page " + page + ") and must be loaded.");
+
+        [theProjectController loadProjectsOnPage:page];
+
+        return nil;
+    }
 
     var view = [tableView makeViewWithIdentifier:[aTableColumn identifier] owner:self];
-    //console.log(view);
+
+    [[view projectName] bind:@"value"
+                    toObject:representedProject
+                 withKeyPath:@"projectName"
+                     options:nil];
+
+    [[view projectDescription] bind:@"value"
+                           toObject:representedProject
+                        withKeyPath:@"projectDescription"
+                            options:nil];
 
     return view;
+}
+
+@end
+
+@implementation ProjectListCellView : CPTableCellView
+{
+    @outlet     CPTextField     projectName         @accessors;
+    @outlet     CPTextField     projectDescription  @accessors;
+    @outlet     CPTextField     projectCreated      @accessors;
 }
 
 @end

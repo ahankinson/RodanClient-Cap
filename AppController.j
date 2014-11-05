@@ -1,7 +1,6 @@
 @import <Foundation/Foundation.j>
 @import <AppKit/AppKit.j>
 @import "Models/Project.j"
-@import "SupportClasses/PaginatedArrayController.j"
 @import "Categories/CPButtonBar+PopupButton.j"
 @import "Categories/CPURLConnection+AsyncBlock.j"
 @import "Controllers/LoadingViewController.j"
@@ -11,11 +10,14 @@
 @import "Controllers/AuthenticationController.j"
 @import "Controllers/ServerController.j"
 
-RodanDidFinishLaunching = @"RodanDidFinishLaunching";
+#pragma mark Launch Notifications
 
+RodanDidFinishLaunching = @"RodanDidFinishLaunching";
 RodanServerConfigurationHasReturnedNotification = @"RodanServerConfigurationHasReturnedNotification";
 RodanClientConfigurationHasFinishedNotification = @"RodanClientConfigurationHasFinishedNotification";
 RodanClientConfigurationWillStartNotification = @"RodanClientConfigurationWillStartNotification";
+
+#pragma mark Authentication Notifications
 
 RodanMustLogInNotification = @"RodanMustLogInNotification";
 RodanCannotLogInNotification = @"RodanCannotLogInNotification";
@@ -24,7 +26,10 @@ RodanDidLogInNotification = @"RodanDidLogInNotification";
 RodanDidLogOutNotification = @"RodanDidLogOutNotification";
 RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotification";
 
+#pragma mark Application Status Notifications
+
 RodanMenubarAndToolbarAreReadyNotification = @"RodanMenubarAndToolbarAreReadyNotification";
+RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
 
 
 @implementation AppController : CPObject
@@ -36,7 +41,7 @@ RodanMenubarAndToolbarAreReadyNotification = @"RodanMenubarAndToolbarAreReadyNot
     @outlet     ServerController            serverController          @accessors(readonly);
     @outlet     AuthenticationController    authenticationController;
     @outlet     ProjectViewController       projectViewController;
-    @outlet     PaginatedArrayController    projectArrayController    @accessors;
+    @outlet     CPArrayController           projectArrayController    @accessors;
 
                 CPScrollView                contentScrollView;
 }
