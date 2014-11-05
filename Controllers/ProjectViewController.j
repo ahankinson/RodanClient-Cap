@@ -49,7 +49,14 @@
         [projectList setDataSource:tableViewDelegate];
 
         // this will fetch the first page of projects
-        [projectController fetchProjectsOnPage:nil];
+        CPLog.debug(@"Loading Projects...");
+
+        // ensure the project array controller knows about object it will be
+        // representing.
+        [projectArrayController setRepresentedObject:Project];
+        [projectArrayController loadRowsForPage:1
+                                      withRoute:@"projects"];
+
 }
 
 - (@action)createNewProject:(id)aSender
@@ -113,8 +120,7 @@
 - (int)numberOfRowsInTableView:(CPTableView)aTableView
 {
     CPLog.debug("Project TableView: numberOfRowsInTableView:");
-    console.log(aTableView);
-    return totalNumberOfProjects;  // debug
+    return [projectArrayController totalObjects];  // debug
 }
 
 - (id)tableView:(CPTableView)aTableView objectValueForTableColumn:(CPTableColumn)aTableColumn row:(CPInteger)aRowIndex
@@ -125,9 +131,10 @@
 - (CPView)tableView:(CPTableView)tableView viewForTableColumn:(CPTableColumn)aTableColumn row:(CPInteger)aRowIndex
 {
     CPLog.debug("Project TableView: viewForTableColumn:row");
+    //[projectArrayController shouldLoadPageForRow:aRowIndex];
 
     var view = [tableView makeViewWithIdentifier:[aTableColumn identifier] owner:self];
-    console.log(view);
+    //console.log(view);
 
     return view;
 }

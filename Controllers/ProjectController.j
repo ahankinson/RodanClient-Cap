@@ -23,24 +23,4 @@
     [selectedObjects makeObjectsPerformSelector:@selector(ensureDeleted)];
 }
 
-- (void)fetchProjectsOnPage:(CPInteger)aPageNumber
-{
-    if (aPageNumber === nil)
-        aPageNumber = 1;
-
-    var url = [serverController routeForRouteName:@"projects"] + @"?page=" + aPageNumber;
-
-    [WLRemoteAction schedule:WLRemoteActionGetType
-                        path:url
-                    delegate:self
-                     message:nil];
-}
-
-- (void)remoteActionDidFinish:(WLRemoteAction)anAction
-{
-    console.log(anAction);
-    // var p = [Project objectsFromJson:[anAction result]];
-    // [projectArrayController addObjects:p];
-}
-
 @end

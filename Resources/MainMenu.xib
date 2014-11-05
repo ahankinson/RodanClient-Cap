@@ -425,15 +425,12 @@
 				</object>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="355300911">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<string key="NSFrameSize">{870, 600}</string>
-					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
-					<reference key="NSNextKeyView"/>
 					<string key="NSReuseIdentifierKey">_NS:20</string>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1920, 1177}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1440, 877}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
@@ -634,6 +631,14 @@
 						<reference key="destination" ref="548181514"/>
 					</object>
 					<int key="connectionID">545</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">serverController</string>
+						<reference key="source" ref="548181514"/>
+						<reference key="destination" ref="417564949"/>
+					</object>
+					<int key="connectionID">546</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -970,6 +975,7 @@
 				<string key="534.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="535.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="542.CustomClassName">PaginatedArrayController</string>
+				<dictionary class="NSMutableDictionary" key="542.IBAttributePlaceholdersKey"/>
 				<string key="542.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="56.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="57.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -984,7 +990,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">545</int>
+			<int key="maxID">546</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1145,6 +1151,17 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">PaginatedArrayController</string>
 					<string key="superclassName">NSArrayController</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">serverController</string>
+						<string key="NS.object.0">ServerController</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">serverController</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">serverController</string>
+							<string key="candidateClassName">ServerController</string>
+						</object>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">../.XcodeSupport/SupportClasses∕PaginatedArrayController.h</string>

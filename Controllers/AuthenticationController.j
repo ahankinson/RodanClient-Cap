@@ -54,6 +54,13 @@
         {
             case 200:
                 CPLog.debug(@"Success; User must already be logged in.");
+                console.log(data);
+                var parsed = JSON.parse(data);
+                [serverController setActiveUser:[[User alloc] initWithJson:parsed]];
+                [serverController setAuthenticationToken:@"Token " + [[serverController activeUser] authenticationToken]];
+
+                [[CPNotificationCenter defaultCenter] postNotificationName:RodanAuthenticationSuccessNotification
+                                                                    object:nil];
                 break;
             case 400:
                 CPLog.debug(@"Bad Auth Status Request.");

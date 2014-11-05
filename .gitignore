@@ -6,3 +6,5 @@ Resources/*.cib
 /RodanNext.xcodeproj
 
 .DS_Store
+
+/Build

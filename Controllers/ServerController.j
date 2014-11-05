@@ -154,6 +154,13 @@
     return [[self routes] objectForKey:aName];
 }
 
+#pragma mark Configuration Helpers
+
+- (CPString)valueForConfiguration:(CPString)aName
+{
+    return [[self configuration] objectForKey:aName];
+}
+
 #pragma mark Ratatosk delegate
 
 /**
