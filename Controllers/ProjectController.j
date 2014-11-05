@@ -3,8 +3,8 @@
 
 @implementation ProjectController : CPObject
 {
-    @outlet     ServerController        serverController;
-    @outlet     CPArrayController       projectArrayController;
+    @outlet     ServerController          serverController;
+    @outlet     PaginatedArrayController  projectArrayController;
 }
 
 - (void)newProject
@@ -23,12 +23,24 @@
     [selectedObjects makeObjectsPerformSelector:@selector(ensureDeleted)];
 }
 
-- (void)fetchProjects
+- (void)fetchProjectsOnPage:(CPInteger)aPageNumber
 {
+    if (aPageNumber === nil)
+        aPageNumber = 1;
+
+    var url = [serverController routeForRouteName:@"projects"] + @"?page=" + aPageNumber;
+
     [WLRemoteAction schedule:WLRemoteActionGetType
-                        path:[serverController routeForRouteName:@"projects"]
+                        path:url
                     delegate:self
                      message:nil];
+}
+
+- (void)remoteActionDidFinish:(WLRemoteAction)anAction
+{
+    console.log(anAction);
+    // var p = [Project objectsFromJson:[anAction result]];
+    // [projectArrayController addObjects:p];
 }
 
 @end

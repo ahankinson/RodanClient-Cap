@@ -6,9 +6,9 @@
 
 @import <Ratatosk/WLRemoteLink.j>
 
-@global RodanSetRoutesNotification
-@global RodanRoutesDidFinishLoadingNotification
-@global RodanRoutesWillStartLoadingNotification
+@global RodanServerConfigurationHasReturnedNotification
+@global RodanClientConfigurationWillStartNotification
+@global RodanClientConfigurationHasFinishedNotification
 
 /**
     This controller stores and manages all of the
@@ -32,6 +32,7 @@
     @outlet     CPString        authenticationType     @accessors;
     @outlet     CPNumber        refreshRate            @accessors;
     @outlet     CPDictionary    routes                 @accessors;
+    @outlet     CPDictionary    configuration          @accessors;
     @outlet     CPCookie        CSRFToken              @accessors;
     @outlet     User            activeUser             @accessors;
 }
@@ -50,8 +51,8 @@
         [[WLRemoteLink sharedRemoteLink] setDelegate:self];
 
         [[CPNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(setRoutesFromNotification:)
-                                                     name:RodanSetRoutesNotification
+                                                 selector:@selector(setClientConfiguration:)
+                                                     name:RodanServerConfigurationHasReturnedNotification
                                                    object:nil];
 
         CPLog.debug(@"Server Controller initialized");
@@ -65,10 +66,10 @@
  *  Queries the root of the Rodan server for the routes to the various
  *  REST endpoints.
  */
-- (void)establishRoutes
+- (void)configureFromServer
 {
     CPLog.debug(@"Establishing Routes from the server");
-    [[CPNotificationCenter defaultCenter] postNotificationName:RodanRoutesWillStartLoadingNotification
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanClientConfigurationWillStartNotification
                                                         object:nil];
 
      // Grab the routes from the Rodan server. These are published at the server root.
@@ -85,7 +86,7 @@
                 dictionary = [CPDictionary dictionaryWithJSObject:jsData];
 
             // The ServerController's setRoutes: method is subscribed to this notification
-            [[CPNotificationCenter defaultCenter] postNotificationName:RodanSetRoutesNotification
+            [[CPNotificationCenter defaultCenter] postNotificationName:RodanServerConfigurationHasReturnedNotification
                                                                 object:dictionary];
         }
     }
@@ -95,12 +96,14 @@
                            completionHandler:completionHandler];
 }
 
-- (void)setRoutesFromNotification:(id)aNotification
+- (void)setClientConfiguration:(id)aNotification
 {
-    CPLog.debug(@"Routes have been established");
-    routes = [aNotification object];
+    CPLog.debug(@"Configuration data has returned");
 
-    [[CPNotificationCenter defaultCenter] postNotificationName:RodanRoutesDidFinishLoadingNotification
+    routes = [CPDictionary dictionaryWithJSObject:[[aNotification object] objectForKey:@"routes"]];
+    configuration = [CPDictionary dictionaryWithJSObject:[[aNotification object] objectForKey:@"configuration"]];
+
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanClientConfigurationHasFinishedNotification
                                                         object:nil]
 }
 
@@ -131,6 +134,7 @@
  */
 - (CPURLRequest)statusRoute
 {
+    console.log([self routes]);
     return [CPURLRequest requestWithURL:[[self routes] objectForKey:@"session-status"]];
 }
 
@@ -159,8 +163,10 @@
  */
 - (void)remoteLink:(WLRemoteLink)aLink willSendRequest:(CPURLRequest)aRequest withDelegate:(id)aDelegate context:(id)aContext
 {
+    CPLog.debug("WL Remote Link was called");
     switch ([[aRequest HTTPMethod] uppercaseString])
     {
+        case "GET":
         case "POST":
         case "PUT":
         case "PATCH":

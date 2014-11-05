@@ -1,6 +1,7 @@
 @import <Foundation/Foundation.j>
 @import <AppKit/AppKit.j>
 @import "Models/Project.j"
+@import "SupportClasses/PaginatedArrayController.j"
 @import "Categories/CPButtonBar+PopupButton.j"
 @import "Categories/CPURLConnection+AsyncBlock.j"
 @import "Controllers/LoadingViewController.j"
@@ -12,9 +13,9 @@
 
 RodanDidFinishLaunching = @"RodanDidFinishLaunching";
 
-RodanRoutesWillStartLoadingNotification = @"RodanRoutesWillStartLoadingNotification";
-RodanSetRoutesNotification = @"RodanSetRoutesNotification";
-RodanRoutesDidFinishLoadingNotification = @"RodanRoutesDidFinishLoadingNotification";
+RodanServerConfigurationHasReturnedNotification = @"RodanServerConfigurationHasReturnedNotification";
+RodanClientConfigurationHasFinishedNotification = @"RodanClientConfigurationHasFinishedNotification";
+RodanClientConfigurationWillStartNotification = @"RodanClientConfigurationWillStartNotification";
 
 RodanMustLogInNotification = @"RodanMustLogInNotification";
 RodanCannotLogInNotification = @"RodanCannotLogInNotification";
@@ -35,7 +36,7 @@ RodanMenubarAndToolbarAreReadyNotification = @"RodanMenubarAndToolbarAreReadyNot
     @outlet     ServerController            serverController          @accessors(readonly);
     @outlet     AuthenticationController    authenticationController;
     @outlet     ProjectViewController       projectViewController;
-    @outlet     CPArrayController           projectArrayController    @accessors;
+    @outlet     PaginatedArrayController    projectArrayController    @accessors;
 
                 CPScrollView                contentScrollView;
 }
@@ -72,7 +73,7 @@ RodanMenubarAndToolbarAreReadyNotification = @"RodanMenubarAndToolbarAreReadyNot
     // Register the callback methods for when the routes have finished loading.
     [[CPNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(checkAuthenticationStatus:)
-                                                 name:RodanRoutesDidFinishLoadingNotification
+                                                 name:RodanClientConfigurationHasFinishedNotification
                                                object:nil];
 
     [[CPNotificationCenter defaultCenter] addObserver:self
@@ -87,12 +88,12 @@ RodanMenubarAndToolbarAreReadyNotification = @"RodanMenubarAndToolbarAreReadyNot
 
     [[CPNotificationCenter defaultCenter] addObserver:loadingViewController
                                              selector:@selector(updateProgressAndStatus:)
-                                                 name:RodanRoutesWillStartLoadingNotification
+                                                 name:RodanClientConfigurationWillStartNotification
                                                object:nil];
 
     [[CPNotificationCenter defaultCenter] addObserver:loadingViewController
                                              selector:@selector(updateProgressAndStatus:)
-                                                 name:RodanRoutesDidFinishLoadingNotification
+                                                 name:RodanClientConfigurationHasFinishedNotification
                                                object:nil];
 
     [[CPNotificationCenter defaultCenter] addObserver:self
@@ -107,7 +108,7 @@ RodanMenubarAndToolbarAreReadyNotification = @"RodanMenubarAndToolbarAreReadyNot
 
     // Establish the server routes.
     // NB: These calls are asynchronous.
-    [serverController establishRoutes];
+    [serverController configureFromServer];
 
     // while we're waiting, set up some views.
     var contentView = [theWindow contentView];

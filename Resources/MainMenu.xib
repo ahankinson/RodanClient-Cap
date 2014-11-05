@@ -425,12 +425,15 @@
 				</object>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="355300911">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<string key="NSFrameSize">{870, 600}</string>
+					<reference key="NSSuperview"/>
+					<reference key="NSWindow"/>
+					<reference key="NSNextKeyView"/>
 					<string key="NSReuseIdentifierKey">_NS:20</string>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1440, 877}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1920, 1177}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
@@ -966,6 +969,7 @@
 				<string key="533.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="534.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="535.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="542.CustomClassName">PaginatedArrayController</string>
 				<string key="542.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="56.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="57.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -991,7 +995,7 @@
 						<string key="authenticationController">AuthenticationController</string>
 						<string key="loadingViewController">LoadingViewController</string>
 						<string key="loginViewController">LoginViewController</string>
-						<string key="projectArrayController">NSArrayController</string>
+						<string key="projectArrayController">PaginatedArrayController</string>
 						<string key="projectViewController">ProjectViewController</string>
 						<string key="serverController">ServerController</string>
 						<string key="theToolbar">NSToolbar</string>
@@ -1012,7 +1016,7 @@
 						</object>
 						<object class="IBToOneOutletInfo" key="projectArrayController">
 							<string key="name">projectArrayController</string>
-							<string key="candidateClassName">NSArrayController</string>
+							<string key="candidateClassName">PaginatedArrayController</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="projectViewController">
 							<string key="name">projectViewController</string>
@@ -1139,27 +1143,24 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">PaginatedArrayController</string>
+					<string key="superclassName">NSArrayController</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../.XcodeSupport/SupportClasses∕PaginatedArrayController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">ProjectController</string>
 					<string key="superclassName">NSObject</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">newProject:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">newProject:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">newProject:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="projectArrayController">NSArrayController</string>
+						<string key="projectArrayController">PaginatedArrayController</string>
 						<string key="serverController">ServerController</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="projectArrayController">
 							<string key="name">projectArrayController</string>
-							<string key="candidateClassName">NSArrayController</string>
+							<string key="candidateClassName">PaginatedArrayController</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="serverController">
 							<string key="name">serverController</string>
@@ -1174,6 +1175,20 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">ProjectViewController</string>
 					<string key="superclassName">NSViewController</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="confirmDeleteProjects:">id</string>
+						<string key="createNewProject:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="confirmDeleteProjects:">
+							<string key="name">confirmDeleteProjects:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="createNewProject:">
+							<string key="name">createNewProject:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="projectAddRemoveButtonBar">CPButtonBar</string>
 						<string key="projectArrayController">NSArrayController</string>
@@ -1226,6 +1241,7 @@
 						<string key="activeUser">User</string>
 						<string key="authenticationToken">NSString</string>
 						<string key="authenticationType">NSString</string>
+						<string key="configuration">NSDictionary</string>
 						<string key="refreshRate">NSNumber</string>
 						<string key="routes">NSDictionary</string>
 						<string key="server">NSString</string>
@@ -1246,6 +1262,10 @@
 						<object class="IBToOneOutletInfo" key="authenticationType">
 							<string key="name">authenticationType</string>
 							<string key="candidateClassName">NSString</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="configuration">
+							<string key="name">configuration</string>
+							<string key="candidateClassName">NSDictionary</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="refreshRate">
 							<string key="name">refreshRate</string>

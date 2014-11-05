@@ -44,20 +44,12 @@
               withKeyPath:@"selectedObjects.@count"
                   options:nil];
 
-        [projectList bind:@"content"
-                 toObject:projectArrayController
-              withKeyPath:@"arrangedObjects"
-                  options:nil];
+        var tableViewDelegate = [[ProjectListTableViewDelegate alloc] initWithArrayController:projectArrayController];
+        [projectList setDelegate:tableViewDelegate];
+        [projectList setDataSource:tableViewDelegate];
 
-        [projectListProjectName bind:@"value"
-                            toObject:projectListCellView
-                         withKeyPath:@"objectValue.projectName"
-                             options:nil];
-
-        [projectListProjectDescription bind:@"value"
-                                   toObject:projectListCellView
-                                withKeyPath:@"objectValue.projectDescription"
-                                    options:nil];
+        // this will fetch the first page of projects
+        [projectController fetchProjectsOnPage:nil];
 }
 
 - (@action)createNewProject:(id)aSender
@@ -98,3 +90,47 @@
 }
 
 @end
+
+/*
+ *  Provides a paged table view delegate.
+ */
+@implementation ProjectListTableViewDelegate : CPObject
+{
+    PaginatedArrayController  projectArrayController          @accessors;
+    CPInteger                 totalNumberOfProjects           @accessors;
+}
+
+- (id)initWithArrayController:(CPArrayController)anArrayController
+{
+    if (self = [super init])
+    {
+        projectArrayController = anArrayController;
+    }
+
+    return self;
+}
+
+- (int)numberOfRowsInTableView:(CPTableView)aTableView
+{
+    CPLog.debug("Project TableView: numberOfRowsInTableView:");
+    console.log(aTableView);
+    return totalNumberOfProjects;  // debug
+}
+
+- (id)tableView:(CPTableView)aTableView objectValueForTableColumn:(CPTableColumn)aTableColumn row:(CPInteger)aRowIndex
+{
+    CPLog.debug("Project TableView: objectValueForTableColumn:row")
+}
+
+- (CPView)tableView:(CPTableView)tableView viewForTableColumn:(CPTableColumn)aTableColumn row:(CPInteger)aRowIndex
+{
+    CPLog.debug("Project TableView: viewForTableColumn:row");
+
+    var view = [tableView makeViewWithIdentifier:[aTableColumn identifier] owner:self];
+    console.log(view);
+
+    return view;
+}
+
+@end
+

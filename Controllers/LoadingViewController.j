@@ -1,7 +1,7 @@
 @import <AppKit/CPViewController.j>
 
-@global RodanRoutesWillStartLoadingNotification
-@global RodanRoutesDidFinishLoadingNotification
+@global RodanClientConfigurationHasFinishedNotification
+@global RodanClientConfigurationWillStartNotification
 
 
 @implementation LoadingViewController : CPViewController
@@ -38,12 +38,12 @@
     CPLog.debug(@"Updating progress and status");
     switch ([aNotification name])
     {
-        case RodanRoutesWillStartLoadingNotification:
+        case RodanClientConfigurationWillStartNotification:
             CPLog.debug(@"Routes will start loading; setting status");
-            [loadingStatus setObjectValue:@"Gathering Routes from Server"];
+            [loadingStatus setObjectValue:@"Loading Configuration from the Server"];
             break;
-        case RodanRoutesDidFinishLoadingNotification:
-            [loadingStatus setObjectValue:@"Routes have loaded"];
+        case RodanClientConfigurationHasFinishedNotification:
+            [loadingStatus setObjectValue:@"Client configuration finished"];
             break;
         default:
             break;

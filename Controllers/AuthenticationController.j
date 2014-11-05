@@ -47,6 +47,7 @@
               forHTTPHeaderField:@"X-CSRFToken"];
     }
 
+    // status request completion handler -- called when the request returns.
     var completionHandler = function(response, data, error)
     {
         switch ([response statusCode])
