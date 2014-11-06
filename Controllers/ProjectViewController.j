@@ -150,7 +150,7 @@
     }
     catch (CPRangeExeception)
     {
-        // the first page is page 1, but that creates 
+        // the first page is page 1, but that creates
         var objectsPerPage = [theProjectController objectsPerPage],
             page = Math.ceil(aRowIndex / (objectsPerPage - 1));
 
