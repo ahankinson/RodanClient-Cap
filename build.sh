@@ -14,6 +14,11 @@ download_and_install()
 
 build()
 {
+    OBJJ_INCLUDE_PATHS="Frameworks" CONFIG="Release" jake build
+}
+
+dbuild()
+{
     OBJJ_INCLUDE_PATHS="Frameworks:Frameworks/Debug" jake build
 }
 
@@ -39,13 +44,15 @@ case "$1" in
     "install" ) download_and_install;;
     "test" ) test;;
     "build" ) build;;
+    "dbuild" ) dbuild;;
     "br" ) build_test_and_run;;
     "run" ) run;;
     * )
         echo "Build options:"
         echo "    install               - Downloads the external framework dependencies and installs them"
         echo "    test                  - Runs the Unit tests"
-        echo "    build                 - Builds the framework for deployment"
+        echo "    build                 - Builds the Release framework for deployment"
+        echo "    dbuild                - Builds the Debug framework"
         echo "    br                    - Run the unit tests, build and then run a Python webserver on the built instance"
         echo "    run                   - Run a Python web server on the un-build application"
     ;;
