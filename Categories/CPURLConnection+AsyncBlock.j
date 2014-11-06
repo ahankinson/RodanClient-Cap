@@ -1,3 +1,5 @@
+@import <Foundation/CPURLConnection.j>
+
 @implementation CPURLConnection (SendAsync)
 
 /*
