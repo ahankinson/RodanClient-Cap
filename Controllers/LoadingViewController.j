@@ -2,7 +2,7 @@
 
 @global RodanClientConfigurationHasFinishedNotification
 @global RodanClientConfigurationWillStartNotification
-
+@global RodanServerWentAwayNotification
 
 @implementation LoadingViewController : CPViewController
 {
@@ -38,9 +38,14 @@
     CPLog.debug(@"Updating progress and status");
     switch ([aNotification name])
     {
+        case RodanServerWentAwayNotification:
+            CPLog(@"Showing server went away status");
+            [loadingStatus setObjectValue:@"The Rodan Server Could not be Reached"];
+            [loadingProgress stopAnimation:nil];
         case RodanClientConfigurationWillStartNotification:
             CPLog.debug(@"Routes will start loading; setting status");
             [loadingStatus setObjectValue:@"Loading Configuration from the Server"];
+            [loadingProgress startAnimation:nil];
             break;
         case RodanClientConfigurationHasFinishedNotification:
             [loadingStatus setObjectValue:@"Client configuration finished"];

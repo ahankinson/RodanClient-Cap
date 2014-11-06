@@ -6,6 +6,7 @@
 
 @import <Ratatosk/WLRemoteLink.j>
 
+@global RodanServerWentAwayNotification
 @global RodanServerConfigurationHasReturnedNotification
 @global RodanClientConfigurationWillStartNotification
 @global RodanClientConfigurationHasFinishedNotification
@@ -81,13 +82,20 @@
         if (data !== nil && [response statusCode] === 200)
         {
             CPLog.debug(@"Routes were received from the server.");
-
             var jsData = JSON.parse(data),
                 dictionary = [CPDictionary dictionaryWithJSObject:jsData];
 
             // The ServerController's setRoutes: method is subscribed to this notification
             [[CPNotificationCenter defaultCenter] postNotificationName:RodanServerConfigurationHasReturnedNotification
                                                                 object:dictionary];
+        }
+        else if ([error code] === CPURLErrorCannotFindHost)
+        {
+            CPLog.debug("Server went away or could not be contacted");
+            [[CPNotificationCenter defaultCenter] postNotificationName:RodanServerWentAwayNotification
+                                                                object:nil];
+
+            return nil;
         }
     }
 
@@ -134,7 +142,6 @@
  */
 - (CPURLRequest)statusRoute
 {
-    console.log([self routes]);
     return [CPURLRequest requestWithURL:[[self routes] objectForKey:@"session-status"]];
 }
 

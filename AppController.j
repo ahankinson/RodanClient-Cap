@@ -28,6 +28,7 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
 
 #pragma mark Application Status Notifications
 
+RodanServerWentAwayNotification = @"RodanServerWentAwayNotification";
 RodanMenubarAndToolbarAreReadyNotification = @"RodanMenubarAndToolbarAreReadyNotification";
 RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
 
@@ -101,6 +102,11 @@ RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
                                                  name:RodanClientConfigurationHasFinishedNotification
                                                object:nil];
 
+    [[CPNotificationCenter defaultCenter] addObserver:loadingViewController
+                                             selector:@selector(updateProgressAndStatus:)
+                                                 name:RodanServerWentAwayNotification
+                                               object:nil];
+
     [[CPNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(enableMenubarAndToolbarOnAuthentication:)
                                                  name:RodanAuthenticationSuccessNotification
@@ -109,6 +115,11 @@ RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
     [[CPNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(cleanUpApplicationAfterLogout:)
                                                  name:RodanDidLogOutNotification
+                                               object:nil];
+
+    [[CPNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(serverWentAway:)
+                                                 name:RodanServerWentAwayNotification
                                                object:nil];
 
     // Establish the server routes.
@@ -139,6 +150,8 @@ RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
 
     CPLog.debug(@"Application finished launching");
 }
+
+#pragma mark Notification Handlers
 
 - (void)enableMenubarAndToolbarOnAuthentication:(CPNotification)aNotification
 {
@@ -188,15 +201,44 @@ RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
         The notification calls this *after* the menubar and toolbar have been
         drawn, since their presence affects the drawing of any subviews.
     */
-    var projectView = [projectViewController view];
-    [projectView setFrame:[contentScrollView bounds]];
-    [projectView setAutoresizingMask:CPViewWidthSizable];
-    [contentScrollView setDocumentView:projectView];
+    [self _showProjectView];
+}
+
+- (void)serverWentAway:(CPNotificationCenter)aNotification
+{
+    var alert = [[CPAlert alloc] init];
+
+    [alert setMessageText:@"The Rodan server could not be contacted"];
+    [alert setDelegate:self];
+    [alert setAlertStyle:CPCriticalAlertStyle];
+    [alert addButtonWithTitle:@"Dismiss"];
+    [alert runModal];
+}
+
+- (void)alertDidEnd:(CPAlert)theAlert returnCode:(int)returnCode
+{
+}
+
+#pragma mark Action Handlers
+
+- (@action)activateProjectView:(id)aSender
+{
+    [self _showProjectView];
 }
 
 - (void)awakeFromCib
 {
     [theWindow setFullPlatformWindow:YES];
+}
+
+#pragma mark - Private Implementation
+
+- (void)_showProjectView
+{
+    var projectView = [projectViewController view];
+    [projectView setFrame:[contentScrollView bounds]];
+    [projectView setAutoresizingMask:CPViewWidthSizable];
+    [contentScrollView setDocumentView:projectView];
 }
 
 @end

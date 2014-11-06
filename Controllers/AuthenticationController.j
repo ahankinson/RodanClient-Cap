@@ -18,6 +18,7 @@
 @import "../Models/User.j"
 @import "ServerController.j"
 
+@global RodanServerWentAwayNotification
 @global RodanMustLogInNotification
 @global RodanFailedLogInNotification
 @global RodanCannotLogInNotification
@@ -52,11 +53,18 @@
     // status request completion handler -- called when the request returns.
     var completionHandler = function(response, data, error)
     {
+        if (data === nil && [error code] === CPURLErrorCannotFindHost)
+        {
+            CPLog.debug("Server went away or could not be contacted");
+
+            [[CPNotificationCenter defaultCenter] postNotificationName:RodanServerWentAwayNotification
+                                                                object:nil];
+        }
+
         switch ([response statusCode])
         {
             case 200:
                 CPLog.debug(@"Success; User must already be logged in.");
-                console.log(data);
                 var parsed = JSON.parse(data);
                 [serverController setActiveUser:[[User alloc] initWithJson:parsed]];
                 [serverController setAuthenticationToken:@"Token " + [[serverController activeUser] authenticationToken]];
