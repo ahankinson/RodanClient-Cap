@@ -1,3 +1,4 @@
+@import <AppKit/CPApplication.j>
 @import <Ratatosk/WLRemoteObject.j>
 @import <Ratatosk/WLRemoteTransformers.j>
 
@@ -57,6 +58,6 @@
     if ([self pk])
         return [self pk];
     else
-        return [[[CPApp delegate] serverController] routeForRouteName:[self route]];
+        return [[[CPApplication sharedApplication] serverController] routeForRouteName:[self route]];
 }
 @end

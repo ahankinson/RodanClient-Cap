@@ -13,6 +13,8 @@
 @import <Foundation/CPURL.j>
 @import <Foundation/CPObject.j>
 @import <Foundation/CPNotificationCenter.j>
+@import <AppKit/CPCookie.j>
+
 @import "../Models/User.j"
 @import "ServerController.j"
 
