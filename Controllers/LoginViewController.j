@@ -44,7 +44,6 @@
 - (@action)logOut:(id)aSender
 {
     CPLog.debug(@"Application Log Out");
-
     [authenticationController logOut];
 }
 

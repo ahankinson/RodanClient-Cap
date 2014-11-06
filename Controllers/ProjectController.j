@@ -44,7 +44,6 @@
 - (void)remoteActionDidFinish:(WLRemoteAction)anAction
 {
     CPLog.debug("Project response came back");
-
     var response = [anAction result],
         results = response.results;
 
@@ -55,9 +54,6 @@
     var page = [anAction message],
         startingIndex = ((page - 1) * [self objectsPerPage]),
         idxSet = [CPIndexSet indexSetWithIndexesInRange:CPMakeRange(startingIndex, results.length)];
-
-    console.log(idxSet);
-    console.log(results);
 
     var p = [Project objectsFromJson:results];
     [[projectArrayController contentArray] insertObjects:p atIndexes:idxSet];
