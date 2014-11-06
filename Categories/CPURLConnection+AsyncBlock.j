@@ -47,7 +47,6 @@
         {
             var response = nil,
                 data = nil,
-                connectionError = nil,
                 userInfo = @{
                     CPUnderlyingErrorKey: @"",
                     CPURLErrorFailingURLErrorKey: [[aRequest URL] absoluteString],
@@ -55,9 +54,9 @@
                     CPLocalizedDescriptionKey: @"A server with the specified hostname could not be found"
                 };
 
-            connectionError = [CPError errorWithDomain:CPURLErrorDomain
-                                                  code:CPURLErrorCannotFindHost
-                                              userInfo:userInfo];
+            var connectionError = [CPError errorWithDomain:CPURLErrorDomain
+                                                      code:CPURLErrorCannotFindHost
+                                                  userInfo:userInfo];
 
             // return the response with nil, but with a nice error object.
             aBlock(response, data, connectionError);
