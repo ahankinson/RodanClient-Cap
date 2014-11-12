@@ -18,6 +18,8 @@
 @import "../Models/User.j"
 @import "ServerController.j"
 
+@global CPURLErrorCannotFindHost
+
 @global RodanServerWentAwayNotification
 @global RodanMustLogInNotification
 @global RodanFailedLogInNotification

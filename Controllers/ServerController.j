@@ -6,6 +6,7 @@
 
 @import <Ratatosk/WLRemoteLink.j>
 
+@global CPURLErrorCannotFindHost
 @global RodanServerWentAwayNotification
 @global RodanServerConfigurationHasReturnedNotification
 @global RodanClientConfigurationWillStartNotification
