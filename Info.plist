@@ -14,6 +14,12 @@
 	<string>//localhost:8001</string>
 	<key>AuthenticationType</key>
 	<string>token</string>
+	<key>AuthenticationToken</key>
+	<string></string>
+	<key>Username</key>
+	<string></string>
+	<key>Password</key>
+	<string></string>
 	<key>Debug</key>
 	<true/>
 	<key>RefreshRate</key>
