@@ -55,9 +55,11 @@
 
 - (CPString)remotePath
 {
+    console.log([CPApplication sharedApplication]);
+
     if ([self pk])
         return [self pk];
     else
-        return [[[CPApplication sharedApplication] serverController] routeForRouteName:[self route]];
+        return [[[[CPApplication sharedApplication] delegate] serverController] routeForRouteName:[self route]];
 }
 @end
