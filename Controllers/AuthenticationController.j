@@ -35,21 +35,28 @@
 
 - (void)checkAuthenticationStatus
 {
-    CPLog.debug(@"Checking Authentication Status");
-
     var authURLRequest = [serverController statusRoute];
     [authURLRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
 
-    if ([serverController authenticationType] === 'session')
+    if ([serverController authenticationType] === 'token')
+    {
+        CPLog.debug("Setting authtoken before checking status");
+        // token values stored in the local configuration file. Check there first.
+        var authToken = [[CPBundle mainBundle] objectForInfoDictionaryKey:@"AuthenticationToken"];
+        [authURLRequest setValue:@"Token " + authToken
+              forHTTPHeaderField:@"Authorization"];
+    }
+    else if ([serverController authenticationType] === 'session')
     {
         CPLog.debug(@"Injecting the cookie for session authentication");
-
         // if the server controller doesn't have the CSRF Token, set it now.
         if (![serverController CSRFToken])
             [serverController setCSRFToken:[[CPCookie alloc] initWithName:@"csrftoken"]];
 
         [authURLRequest setValue:[[serverController CSRFToken] value]
               forHTTPHeaderField:@"X-CSRFToken"];
+
+        [authURLRequest setWithCredentials:YES];
     }
 
     // status request completion handler -- called when the request returns.
@@ -58,7 +65,6 @@
         if (data === nil && [error code] === CPURLErrorCannotFindHost)
         {
             CPLog.debug("Server went away or could not be contacted");
-
             [[CPNotificationCenter defaultCenter] postNotificationName:RodanServerWentAwayNotification
                                                                 object:nil];
         }
@@ -96,7 +102,8 @@
 
     [CPURLConnection sendAsynchronousRequest:authURLRequest
                                        queue:[CPOperationQueue mainQueue]
-                                       completionHandler:completionHandler];
+                           completionHandler:completionHandler];
+
 }
 
 - (void)logInWithUsername:(CPString)aUsername password:(CPString)aPassword
@@ -105,7 +112,7 @@
 
     [authURLRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [authURLRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [authURLRequest setHTTPBody:@"username=" + [aUsername objectValue] + "&password=" + [aPassword objectValue]];
+    [authURLRequest setHTTPBody:@"username=" + aUsername + "&password=" + aPassword];
     [authURLRequest setHTTPMethod:@"POST"];
 
     if ([serverController authenticationType] === 'session')
@@ -113,6 +120,8 @@
         if (![serverController CSRFToken])
             [serverController setCSRFToken:[[CPCookie alloc] initWithName:@"csrftoken"]];
 
+        // make sure the cookies and CSRF Tokens get passed along
+        [authURLRequest setWithCredentials:YES];
         [authURLRequest setValue:[[serverController CSRFToken] value]
               forHTTPHeaderField:@"X-CSRFToken"];
     }
@@ -167,9 +176,14 @@
     [logoutURLRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
 
     if ([serverController authenticationType] === 'session')
-        [logoutURLRequest setValue:[[serverController CSRFToken] value] forHTTPHeaderField:@"X-CSRFToken"];
+    {
+        [logoutURLRequest setWithCredentials:YES];
+        [logoutURLRequest setValue:[[serverController CSRFToken] value]
+                forHTTPHeaderField:@"X-CSRFToken"];
+    }
     else
-        [logoutURLRequest setValue:[serverController authenticationToken] forHTTPHeaderField:@"Authorization"];
+        [logoutURLRequest setValue:[serverController authenticationToken]
+                forHTTPHeaderField:@"Authorization"];
 
     [logoutURLRequest setHTTPMethod:@"POST"];
 
@@ -180,7 +194,7 @@
             case 200:
                 CPLog.debug(@"Success.");
                 [[CPNotificationCenter defaultCenter] postNotificationName:RodanDidLogOutNotification
-                                                    object:nil];
+                                                                    object:nil];
                 break;
             case 400:
                 CPLog.debug(@"Bad Request");
@@ -204,7 +218,7 @@
 
     [CPURLConnection sendAsynchronousRequest:logoutURLRequest
                                     queue:[CPOperationQueue mainQueue]
-                                    completionHandler:completionHandler];
+                        completionHandler:completionHandler];
 }
 
 @end

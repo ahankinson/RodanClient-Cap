@@ -63,7 +63,6 @@
     return self;
 }
 
-
 /**
  *  Queries the root of the Rodan server for the routes to the various
  *  REST endpoints.
@@ -188,7 +187,9 @@
         case "DELETE":
             if (authenticationType === 'session')
             {
+                CPLog.debug("Setting CSRF Token for Ratatosk request");
                 [aRequest setValue:[CSRFToken value] forHTTPHeaderField:@"X-CSRFToken"];
+                [aRequest setWithCredentials:YES];
             }
             else
             {

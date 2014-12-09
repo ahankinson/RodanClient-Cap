@@ -37,6 +37,7 @@
     var req = new CFHTTPRequest();
 
     req.open([aRequest HTTPMethod], [[aRequest URL] absoluteString], YES);
+    req.setWithCredentials([aRequest withCredentials]);
 
     req.onreadystatechange = function (event)
     {
@@ -110,21 +111,6 @@
         req.setRequestHeader(key, [fields objectForKey:key]);
 
     req.send([aRequest HTTPBody]);
-
-    // catch (anException)
-    // {
-    //     CPLog.debug('an error occurred');
-    //     console.log
-
-    //     var response = nil,
-    //         data = nil,
-    //         connectionError = anException;
-
-    //     aBlock(response, data, connectionError);
-
-    //     if ([_delegate respondsToSelector:@selector(connection:didFailWithError:)])
-    //         [_delegate connection:self didFailWithError:anException];
-    // }
 }
 
 @end
