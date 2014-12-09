@@ -38,7 +38,10 @@
 - (@action)logIn:(id)aSender
 {
     CPLog.debug(@"Application Log In");
-    [authenticationController logInWithUsername:username password:password];
+    var uname = [username objectValue],
+        passwd = [password objectValue];
+
+    [authenticationController logInWithUsername:uname password:passwd];
 }
 
 - (@action)logOut:(id)aSender

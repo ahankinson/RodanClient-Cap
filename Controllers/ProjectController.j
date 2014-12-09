@@ -1,12 +1,34 @@
 @import "../Models/Project.j"
 
 @global RodanDidLoadProjectsNotification
+@global RodanRefreshProjectListNotification
+
+@class ServerController
 
 @implementation ProjectController : CPObject
 {
     @outlet     ServerController          serverController;
     @outlet     CPArrayController   projectArrayController      @accessors;
                 CPInteger                 numberOfProjects      @accessors;
+
+                CPInteger            _currentlyLoadingPage;
+}
+
+- (id)init
+{
+    if (self = [super init])
+    {
+        CPLog.debug('initializing project controller');
+
+        _currentlyLoadingPage = 0;  // there is no page 0.
+
+        [[CPNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(refreshProjectList:)
+                                                     name:RodanRefreshProjectListNotification
+                                                   object:nil];
+    }
+
+    return self;
 }
 
 - (void)newProject
@@ -14,6 +36,10 @@
     var newProject = [[Project alloc] initWithCreator:[[serverController activeUser] pk]];
     [projectArrayController addObject:newProject];
     [newProject ensureCreated];
+
+    // fire this notification to reload the table.
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanRefreshProjectListNotification
+                                                        object:nil];
 }
 
 - (void)deleteProjects
@@ -25,9 +51,25 @@
     [selectedObjects makeObjectsPerformSelector:@selector(ensureDeleted)];
 }
 
+- (void)refreshProjectList:(CPNotification)aNotification
+{
+    // loading page 1 should restart the loading process.
+    [[self projectArrayController] setContent:[]];
+    [self loadProjectsOnPage:1];
+}
+
 - (void)loadProjectsOnPage:(CPInteger)pageNumber
 {
+    // if we're already loading this page, ignore future requests. This will get 
+    // reset once this request returns;
+    if (_currentlyLoadingPage === pageNumber)
+        return;
+
+    _currentlyLoadingPage = pageNumber;
+
+    CPLog.debug("Load Projects on Page " + pageNumber);
     var url = [serverController routeForRouteName:@"projects"] + @"?page=" + pageNumber;
+
     [WLRemoteAction schedule:WLRemoteActionGetType
                         path:url
                     delegate:self
@@ -41,9 +83,20 @@
 
 #pragma mark Ratatosk response delegate
 
+- (void)remoteActionDidFail:(WLRemoteAction)anAction dueToAuthentication:(BOOL)dueToAuthentication
+{
+    CPLog.debug(@"Remote action failed due to Authentication " + dueToAuthentication);
+    console.log(anAction);
+
+    _currentlyLoadingPage = 0;
+}
+
 - (void)remoteActionDidFinish:(WLRemoteAction)anAction
 {
     CPLog.debug("Project response came back");
+
+    _currentlyLoadingPage = 0;
+
     var response = [anAction result],
         results = response.results;
 
@@ -58,8 +111,8 @@
     var p = [Project objectsFromJson:results];
     [[projectArrayController contentArray] insertObjects:p atIndexes:idxSet];
 
-    [[CPNotificationCenter defaultCenter] postNotificationName:RodanDidLoadProjectsNotification
-                                                        object:nil];
+    // [[CPNotificationCenter defaultCenter] postNotificationName:RodanDidLoadProjectsNotification
+    //                                                     object:nil];
 }
 
 @end
