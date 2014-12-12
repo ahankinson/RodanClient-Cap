@@ -11,13 +11,13 @@
 	<key>CPHumanReadableCopyright</key>
 	<string>Copyright © 2014, Andrew Hankinson All rights reserved.</string>
 	<key>ServerHost</key>
-	<string>//localhost:8001</string>
+	<string>//132.206.14.121:8001</string>
 	<key>AuthenticationType</key>
-	<string>token</string>
+	<string>session</string>
 	<key>AuthenticationToken</key>
-	<string></string>
+	<string>33e55d20d227787b8ecd0506f99e194be16e875d</string>
 	<key>Username</key>
-	<string></string>
+	<string>ahankins</string>
 	<key>Password</key>
 	<string></string>
 	<key>Debug</key>

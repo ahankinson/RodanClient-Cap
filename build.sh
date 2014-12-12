@@ -32,12 +32,12 @@ build_test_and_run()
     test
     build
     cd Build/Debug/RodanNext
-    python -m SimpleHTTPServer
+    python ../../../server.py
 }
 
 run()
 {
-    python -m SimpleHTTPServer
+    python server.py
 }
 
 case "$1" in

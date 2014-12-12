@@ -12,6 +12,18 @@
     BOOL        isSuperuser @accessors;
     CPString    email       @accessors;
     CPString    authenticationToken @accessors;
+
+    CPString    route       @accessors(readonly);
+}
+
+- (id)init
+{
+    if (self = [super init])
+    {
+        route = @"users";
+    }
+
+    return self;
 }
 
 + (CPArray)remoteProperties
@@ -29,4 +41,5 @@
         ['authenticationToken', 'token', nil, YES]
     ];
 }
+
 @end

@@ -41,8 +41,10 @@
 
     req.onreadystatechange = function (event)
     {
-        var statusCode = req.status();
+        if (req.readyState() !== CFHTTPRequest.CompleteState)
+            return;
 
+        var statusCode = req.status();
         // a status code of 0 usually means the server could not be found.
         if (statusCode === 0)
         {
@@ -99,6 +101,7 @@
                                                       code:code
                                                   userInfo:userInfo];
 
+            CPLog.debug("Returning " + statusCode);
             aBlock(response, data, connectionError);
         }
     };

@@ -2,16 +2,20 @@
 @import <Ratatosk/WLRemoteObject.j>
 @import <Ratatosk/WLRemoteTransformers.j>
 
+@class User
+
 @implementation Project : WLRemoteObject
 {
     CPString    uuid                @accessors;
     CPString    pk                  @accessors;
     CPString    projectName         @accessors;
-    CPString    projectCreator      @accessors;
+    User        projectCreator      @accessors;
     CPString    projectDescription  @accessors;
     CPObject    projectOwner        @accessors;
-    CPString    resourceURI         @accessors;
-    // CPArray     pages               @accessors;
+    CPInteger   workflow_count      @accessors;
+    CPInteger   resource_count      @accessors;
+    CPArray     resources           @accessors;
+    CPArray     workflows           @accessors;
     CPDate      created             @accessors;
     CPDate      updated             @accessors;
 
@@ -46,20 +50,12 @@
         ['pk', 'url'],
         ['projectName', 'name'],
         ['projectDescription', 'description'],
-        ['projectCreator', 'creator'],
-        // ['pages', 'pages', [WLForeignObjectsTransformer forObjectClass:Page]],
+        ['projectCreator', 'creator', [WLForeignObjectTransformer forObjectClass:User]],
+        ['workflows', 'workflows', [WLForeignObjectsTransformer forObjectClass:Workflow]],
+        ['resources', 'resources', [WLForeignObjectsTransformer forObjectClass:Resource]],
         ['created', 'created', [[WLDateTransformer alloc] init], true],
         ['updated', 'updated', [[WLDateTransformer alloc] init], true]
     ];
 }
 
-- (CPString)remotePath
-{
-    console.log([CPApplication sharedApplication]);
-
-    if ([self pk])
-        return [self pk];
-    else
-        return [[[[CPApplication sharedApplication] delegate] serverController] routeForRouteName:[self route]];
-}
 @end

@@ -42,11 +42,14 @@
             CPLog(@"Showing server went away status");
             [loadingStatus setObjectValue:@"The Rodan Server Could not be Reached"];
             [loadingProgress stopAnimation:nil];
+            break;
+
         case RodanClientConfigurationWillStartNotification:
             CPLog.debug(@"Routes will start loading; setting status");
             [loadingStatus setObjectValue:@"Loading Configuration from the Server"];
             [loadingProgress startAnimation:nil];
             break;
+
         case RodanClientConfigurationHasFinishedNotification:
             [loadingStatus setObjectValue:@"Client configuration finished"];
             break;

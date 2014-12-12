@@ -1,5 +1,4 @@
 @import <AppKit/CPWindowController.j>
-@import "ProjectController.j"
 
 
 @implementation NewProjectWindowController : CPWindowController

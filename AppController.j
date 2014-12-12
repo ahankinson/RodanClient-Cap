@@ -1,9 +1,17 @@
 @import <Foundation/Foundation.j>
 @import <AppKit/AppKit.j>
+@import "Models/Output.j"
 @import "Models/Project.j"
+@import "Models/Resource.j"
+@import "Models/ResourceType.j"
+@import "Models/RunJob.j"
+@import "Models/User.j"
+@import "Models/Workflow.j"
 @import "Categories/CPButtonBar+PopupButton.j"
 @import "Categories/CPURLConnection+AsyncBlock.j"
+@import "Categories/WLRemoteObject+RemotePath.j"
 @import "Controllers/ProjectController.j"
+@import "Controllers/ServerController.j"
 @import "Controllers/NewProjectWindowController.j"
 @import "Controllers/OpenProjectWindowController.j"
 @import "Controllers/LoadingViewController.j"

@@ -8,9 +8,10 @@
 @implementation ProjectController : CPObject
 {
     @outlet     ServerController          serverController;
-    @outlet     CPArrayController   projectArrayController      @accessors;
-                CPInteger                 numberOfProjects      @accessors;
-
+    @outlet     CPArrayController    projectArrayController     @accessors;
+    @outlet     CPArrayController   workflowArrayController     @accessors;
+    @outlet     CPArrayController   resourceArrayController     @accessors;
+                CPInteger                  numberOfProjects     @accessors;
                 CPInteger            _currentlyLoadingPage;
 }
 
@@ -86,8 +87,6 @@
 - (void)remoteActionDidFail:(WLRemoteAction)anAction dueToAuthentication:(BOOL)dueToAuthentication
 {
     CPLog.debug(@"Remote action failed due to Authentication " + dueToAuthentication);
-    console.log(anAction);
-
     _currentlyLoadingPage = 0;
 }
 
@@ -100,6 +99,8 @@
     var response = [anAction result],
         results = response.results;
 
+    console.log(results);
+
     if (!numberOfProjects)
         numberOfProjects = response.count;
 
@@ -111,8 +112,8 @@
     var p = [Project objectsFromJson:results];
     [[projectArrayController contentArray] insertObjects:p atIndexes:idxSet];
 
-    // [[CPNotificationCenter defaultCenter] postNotificationName:RodanDidLoadProjectsNotification
-    //                                                     object:nil];
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanDidLoadProjectsNotification
+                                                        object:nil];
 }
 
 @end
