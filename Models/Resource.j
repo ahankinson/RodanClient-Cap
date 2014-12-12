@@ -44,8 +44,8 @@
 + (CPArray)remoteProperties
 {
     return [
-        ['pk', 'pk'],
-        ['uuid', 'uuid'],
+        ['pk', 'url', nil, YES],
+        ['uuid', 'uuid', nil, YES],
         ['project', 'project', [WLForeignObjectTransformer forObjectClass:Project]],
         ['creator', 'creator', [WLForeignObjectTransformer forObjectClass:User]],
         ['resourceName', 'name'],
@@ -56,8 +56,8 @@
         ['errorSummary', 'error_summary'],
         ['errorDetails', 'error_details'],
         ['origin', 'origin', [WLForeignObjectTransformer forObjectClass:Output]],
-        ['created', 'created', [[WLDateTransformer alloc] init], true],
-        ['updated', 'updated', [[WLDateTransformer alloc] init], true],
+        ['created', 'created', [[WLDateTransformer alloc] init], YES],
+        ['updated', 'updated', [[WLDateTransformer alloc] init], YES],
         ['hasThumb', 'has_thumb'],
         ['smallThumb', 'small_thumb'],
         ['mediumThumb', 'medium_thumb'],

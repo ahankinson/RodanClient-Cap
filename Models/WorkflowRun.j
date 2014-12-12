@@ -1,16 +1,13 @@
 @import <Ratatosk/WLRemoteObject.j>
 
-@class Project
-@class User
-
-@implementation Workflow : WLRemoteObject
+@implementation WorkflowRun : WLRemoteObject
 {
     CPString        uuid        @accessors;
     CPString        pk          @accessors;
-    Project         project     @accessors;
-    CPString        description @accessors;
+    Workflow        workflow    @accessors;
     User            creator     @accessors;
-    BOOL            valid       @accessors;
+    BOOL            testRun     @accessors;
+    CPInteger       status      @accessors;
 
     CPDate          created     @accessors;
     CPDate          updated     @accessors;
@@ -22,7 +19,7 @@
 {
     if (self = [super init])
     {
-        route = @"workflows";
+        route = @"workflowruns";
     }
 
     return self;
@@ -31,12 +28,12 @@
 + (CPArray)remoteProperties
 {
     return [
-        ['pk', 'url', nil, YES],
         ['uuid', 'uuid', nil, YES],
-        ['project', 'project', [WLForeignObjectTransformer forObjectClass:Project]],
-        ['description', 'description'],
+        ['pk', 'url', nil, YES],
+        ['workflow', 'workflow', [WLForeignObjectTransformer forObjectClass:Workflow]],
         ['creator', 'creator', [WLForeignObjectTransformer forObjectClass:User]],
-        ['valid', 'valid'],
+        ['testRun', 'test_run'],
+        ['status', 'status'],
         ['created', 'created', [[WLDateTransformer alloc] init], YES],
         ['updated', 'updated', [[WLDateTransformer alloc] init], YES]
     ];

@@ -1,29 +1,27 @@
 @import <Ratatosk/WLRemoteObject.j>
 
-@class RunJob
-@class Resource
-@class OutputPort
+@class OutputPortType
+@class WorkflowJob
 
-@implementation Output : WLRemoteObject
+
+@implementation OutputPort : WLRemoteObject
 {
     CPString        uuid            @accessors;
     CPString        pk              @accessors;
-    RunJob          runJob          @accessors;
-    Resource        resource        @accessors;
-    OutputPort      outputPort      @accessors;
+    OutputPortType  outputPortType  @accessors;
+    CPString        label           @accessors;
 
     CPDate          created         @accessors;
     CPDate          updated         @accessors;
 
     CPString        route           @accessors(readonly);
-
 }
 
 - (id)init
 {
     if (self = [super init])
     {
-        route = @"outputs";
+        route = @"outputports";
     }
 
     return self;
@@ -34,9 +32,8 @@
     return [
         ['uuid', 'uuid', nil, YES],
         ['pk', 'url', nil, YES],
-        ['ouptutPort', 'output_port', [WLForeignObjectTransformer forObjectClass:OutputPort]],
-        ['resource', 'resouce', [WLForeignObjectTransformer forObjectClass:Resource]],
-        ['runJob', 'run_job', [WLForeignObjectTransformer forObjectClass:RunJob]],
+        ['outputPortType', 'output_port_type', [WLForeignObjectTransformer forObjectClass:OutputPortType]],
+        ['label', 'label'],
         ['created', 'created', [[WLDateTransformer alloc] init], YES],
         ['updated', 'updated', [[WLDateTransformer alloc] init], YES]
     ];

@@ -2,18 +2,18 @@
 
 @implementation User : WLRemoteObject
 {
-    CPString    pk          @accessors;
-    CPString    username    @accessors;
-    CPString    firstName   @accessors;
-    CPString    lastName    @accessors;
-    CPArray     groups      @accessors;
-    BOOL        isActive    @accessors;
-    BOOL        isStaff     @accessors;
-    BOOL        isSuperuser @accessors;
-    CPString    email       @accessors;
+    CPString    pk                  @accessors;
+    CPString    username            @accessors;
+    CPString    firstName           @accessors;
+    CPString    lastName            @accessors;
+    CPArray     groups              @accessors;
+    BOOL        isActive            @accessors;
+    BOOL        isStaff             @accessors;
+    BOOL        isSuperuser         @accessors;
+    CPString    email               @accessors;
     CPString    authenticationToken @accessors;
 
-    CPString    route       @accessors(readonly);
+    CPString    route               @accessors(readonly);
 }
 
 - (id)init
@@ -29,7 +29,7 @@
 + (CPArray)remoteProperties
 {
     return [
-        ['pk', 'url'],
+        ['pk', 'url', nil, YES],
         ['username', 'username'],
         ['firstName', 'first_name'],
         ['lastName', 'last_name'],
