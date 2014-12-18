@@ -31,8 +31,8 @@
     User        projectCreator      @accessors;
     CPString    projectDescription  @accessors;
     CPObject    projectOwner        @accessors;
-    CPInteger   workflow_count      @accessors;
-    CPInteger   resource_count      @accessors;
+    CPInteger   workflowCount       @accessors;
+    CPInteger   resourceCount       @accessors;
     CPArray     resources           @accessors;     // Array<Resource>
     CPArray     workflows           @accessors;     // Array<Workflow>
     CPDate      created             @accessors;
@@ -89,6 +89,8 @@
         ['pk', 'url', nil, YES],
         ['projectName', 'name'],
         ['projectDescription', 'description'],
+        ['workflowCount', 'workflow_count'],
+        ['resourceCount', 'resource_count'],
         ['projectCreator', 'creator', [WLForeignObjectTransformer forObjectClass:User]],
         ['workflows', 'workflows', [WLForeignObjectsTransformer forObjectClass:Workflow]],
         ['resources', 'resources', [WLForeignObjectsTransformer forObjectClass:Resource]],
