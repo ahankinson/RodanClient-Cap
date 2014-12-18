@@ -31,8 +31,10 @@ build_test_and_run()
 {
     test
     build
-    cd Build/Debug/RodanNext
-    python ../../../server.py
+    cp server.py Build/Release/RodanNext
+    cd Build/Release/RodanNext
+    pwd
+    python server.py
 }
 
 run()
