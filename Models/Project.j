@@ -10,6 +10,8 @@
 @class Workflow
 @class Resource
 
+@global RodanProjectWasMadeActiveProject
+
 /*
  *  This class is a reference for other Model objects. Other model objects
  *  will be minimally commented, but you should refer to this model for notes on
@@ -55,6 +57,7 @@
     {
         route = @"projects";
         projectName = @"Untitled Project";
+        [self setDelegate:self];
     }
 
     return self;
@@ -97,6 +100,12 @@
         ['created', 'created', [[WLDateTransformer alloc] init], YES],
         ['updated', 'updated', [[WLDateTransformer alloc] init], YES]
     ];
+}
+
+- (void)remoteObjectWasLoaded:(Project)aProject
+{
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanProjectWasMadeActiveProject
+                                                        object:aProject];
 }
 
 @end
