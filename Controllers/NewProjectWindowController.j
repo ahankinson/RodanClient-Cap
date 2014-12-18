@@ -2,14 +2,26 @@
 
 
 @implementation NewProjectWindowController : CPWindowController
+{
+    @outlet     CPTextField          projectName;
+    @outlet     CPTextField          projectCreator;
+    @outlet     CPTextField          projectDescription;
+}
 
 - (id)init
 {
-    if (self = [self initWithWindowCibName:@"NewProjectWindow" owner:self])
+    var localizedCibFile = [[CPBundle mainBundle] bundleLocale] + @".lproj/NewProjectWindow.cib";
+    if (self = [self initWithWindowCibName:localizedCibFile
+                                     owner:self])
     {
     }
 
     return self;
+}
+
+- (@action)createProject:(id)aSender
+{
+    // pass
 }
 
 @end

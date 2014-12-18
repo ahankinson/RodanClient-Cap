@@ -1,5 +1,6 @@
 @import <Foundation/Foundation.j>
 @import <AppKit/AppKit.j>
+
 @import "Models/Output.j"
 @import "Models/Project.j"
 @import "Models/Resource.j"
@@ -61,25 +62,6 @@ RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
 {
-    var debug = [[CPBundle mainBundle] objectForInfoDictionaryKey:@"Debug"];
-
-    if (!debug)
-    {
-        CPLogRegister(CPLogConsole, "info");
-
-        // this gets annoying on a dev machine.
-        window.onbeforeunload = function()
-        {
-            return "This will terminate the Application. Are you sure you want to leave?";
-        }
-
-    }
-    else
-    {
-        CPLogRegister(CPLogConsole, "debug");
-        CPLog.debug(@"Debug log level set.");
-    }
-
     /*
         Start the Rodan startup process
     */
@@ -220,7 +202,7 @@ RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
     [alert setMessageText:@"The Rodan server could not be contacted"];
     [alert setDelegate:self];
     [alert setAlertStyle:CPCriticalAlertStyle];
-    [alert addButtonWithTitle:@"Dismiss"];
+    [alert addButtonWithTitle:CPLocalizedString(@"Dismiss", @"Dismiss")];
     [alert runModal];
 }
 
@@ -238,6 +220,25 @@ RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
 
 - (void)awakeFromCib
 {
+    var debug = [[CPBundle mainBundle] objectForInfoDictionaryKey:@"Debug"];
+
+    if (!debug)
+    {
+        CPLogRegister(CPLogConsole, "info");
+
+        // this gets annoying on a dev machine.
+        window.onbeforeunload = function()
+        {
+            return "This will terminate the Application. Are you sure you want to leave?";
+        }
+
+    }
+    else
+    {
+        CPLogRegister(CPLogConsole, "debug");
+        CPLog.debug(@"Debug log level set.");
+    }
+
     [theWindow setFullPlatformWindow:YES];
 }
 

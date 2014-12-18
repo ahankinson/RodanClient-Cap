@@ -1,0 +1,22 @@
+
+/* Class = "NSTextFieldCell"; title = "Label"; ObjectID = "0Xe-Ze-nFu"; */
+"0Xe-Ze-nFu.title" = "Label";
+
+/* Class = "NSTextFieldCell"; title = "Project Creator:"; ObjectID = "2YL-t4-UQV"; */
+"2YL-t4-UQV.title" = "Project Creator:";
+
+/* Class = "NSTextFieldCell"; title = "Project Name:"; ObjectID = "BHQ-tO-wpy"; */
+"BHQ-tO-wpy.title" = "Project Name:";
+
+/* Class = "NSButtonCell"; title = "Create Project"; ObjectID = "CKf-p0-6TK"; */
+"CKf-p0-6TK.title" = "Create Project";
+
+/* Class = "NSWindow"; title = "New Project..."; ObjectID = "QvC-M9-y7g"; */
+"QvC-M9-y7g.title" = "New Project...";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "Z1t-W5-yYo"; */
+"Z1t-W5-yYo.title" = "Cancel";
+
+/* Class = "NSTextFieldCell"; title = "Project Description:"; ObjectID = "oPE-tT-0Ny"; */
+"oPE-tT-0Ny.title" = "Project Description:";
+

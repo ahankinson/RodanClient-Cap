@@ -12,7 +12,8 @@
 
 - (id)init
 {
-    if (self = [self initWithWindowCibName:@"OpenProjectWindow" owner:self])
+    var localizedCibFile = [[CPBundle mainBundle] bundleLocale] + @".lproj/OpenProjectWindow.cib";
+    if (self = [self initWithWindowCibName:localizedCibFile owner:self])
     {
         [[CPNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(refreshProjectList:)
@@ -110,12 +111,3 @@
 }
 
 @end
-
-// @implementation ProjectListCellView : CPTableCellView
-// {
-//     @outlet     CPTextField     projectName         @accessors;
-//     @outlet     CPTextField     projectDescription  @accessors;
-//     @outlet     CPTextField     projectCreated      @accessors;
-// }
-
-//@end

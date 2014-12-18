@@ -7,6 +7,7 @@
 
 @implementation ProjectController : CPObject
 {
+                Project              currentlyActiveProject     @accessors;
     @outlet     ServerController          serverController;
     @outlet     CPArrayController    projectArrayController     @accessors;
     @outlet     CPArrayController   workflowArrayController     @accessors;
@@ -37,10 +38,6 @@
     var newProject = [[Project alloc] initWithCreator:[[serverController activeUser] pk]];
     [projectArrayController addObject:newProject];
     [newProject ensureCreated];
-
-    // fire this notification to reload the table.
-    [[CPNotificationCenter defaultCenter] postNotificationName:RodanRefreshProjectListNotification
-                                                        object:nil];
 }
 
 - (void)deleteProjects
@@ -61,7 +58,7 @@
 
 - (void)loadProjectsOnPage:(CPInteger)pageNumber
 {
-    // if we're already loading this page, ignore future requests. This will get 
+    // if we're already loading this page, ignore future requests. This will get
     // reset once this request returns;
     if (_currentlyLoadingPage === pageNumber)
         return;

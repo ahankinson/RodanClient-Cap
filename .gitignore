@@ -8,3 +8,5 @@ Resources/*.cib
 .DS_Store
 
 /Build
+
+Resources/**/*.cib

@@ -1,0 +1,46 @@
+
+/* Class = "NSTableColumn"; headerCell.title = "Creator"; ObjectID = "0Db-do-I8e"; */
+"0Db-do-I8e.headerCell.title" = "Creator";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "20i-jS-87p"; */
+"20i-jS-87p.title" = "Text Cell";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "4DY-IL-sjz"; */
+"4DY-IL-sjz.title" = "Table View Cell";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "8Sc-vZ-u2R"; */
+"8Sc-vZ-u2R.title" = "Table View Cell";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "BGo-DQ-DUs"; */
+"BGo-DQ-DUs.title" = "Table View Cell";
+
+/* Class = "NSTableColumn"; headerCell.title = "Project Name"; ObjectID = "Ehh-n0-X93"; */
+"Ehh-n0-X93.headerCell.title" = "Project Name";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "En1-oz-6Zu"; */
+"En1-oz-6Zu.title" = "Table View Cell";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "J6f-rk-cYL"; */
+"J6f-rk-cYL.title" = "Text Cell";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "Pii-e3-phK"; */
+"Pii-e3-phK.title" = "Text Cell";
+
+/* Class = "NSWindow"; title = "Open Project..."; ObjectID = "QvC-M9-y7g"; */
+"QvC-M9-y7g.title" = "Open Project...";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "RJc-cf-IdU"; */
+"RJc-cf-IdU.title" = "Cancel";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "V7w-AY-CJG"; */
+"V7w-AY-CJG.title" = "Text Cell";
+
+/* Class = "NSButtonCell"; title = "Open Project"; ObjectID = "d1t-1t-S9z"; */
+"d1t-1t-S9z.title" = "Open Project";
+
+/* Class = "NSTableColumn"; headerCell.title = "Created"; ObjectID = "hcY-oC-mb3"; */
+"hcY-oC-mb3.headerCell.title" = "Created";
+
+/* Class = "NSTableColumn"; headerCell.title = "Description"; ObjectID = "uyo-tb-Jdx"; */
+"uyo-tb-Jdx.headerCell.title" = "Description";
+

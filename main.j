@@ -8,6 +8,7 @@
 
 @import <Foundation/Foundation.j>
 @import <AppKit/AppKit.j>
+@import "Categories/CPBundle+Localizable.j"
 
 @import "AppController.j"
 

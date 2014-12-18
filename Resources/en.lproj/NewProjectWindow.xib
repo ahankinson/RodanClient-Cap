@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NewProjectWindowController">
             <connections>
+                <outlet property="projectCreator" destination="L7F-FO-UQ5" id="Ccb-50-r4E"/>
+                <outlet property="projectDescription" destination="fyf-ZJ-H2O" id="n2M-M4-R52"/>
+                <outlet property="projectName" destination="kFZ-w8-Wd0" id="6aX-vB-3Gf"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="giA-qM-eSm"/>
             </connections>
         </customObject>
@@ -65,7 +68,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="fyf-ZJ-H2O">
+                    <textField verticalHuggingPriority="750" id="fyf-ZJ-H2O">
                         <rect key="frame" x="150" y="49" width="316" height="98"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="OIz-cA-VkE">
@@ -81,6 +84,9 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="createProject:" target="-2" id="mRh-nd-iSh"/>
+                        </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="uWt-f1-Fce">
                         <rect key="frame" x="260" y="13" width="83" height="32"/>

@@ -17,7 +17,8 @@
 
 - (id)init
 {
-    if (self = [super initWithCibName:@"LoginView" bundle:nil])
+    var localizedCibFile = [[CPBundle mainBundle] bundleLocale] + @".lproj/LoginView.cib";
+    if (self = [super initWithCibName:localizedCibFile bundle:nil])
     {
         var shadowView = [[CPShadowView alloc] initWithFrame:[[self view] bounds]];
         [[self view] addSubview:shadowView];

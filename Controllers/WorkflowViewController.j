@@ -6,7 +6,8 @@
 
 - (id)init
 {
-    if (self = [super initWithCibName:@"WorkflowView" bundle:nil])
+    var localizedCibFile = [[CPBundle mainBundle] bundleLocale] + @".lproj/WorkflowView.cib";
+    if (self = [super initWithCibName:localizedCibFile bundle:nil])
     {
     }
 

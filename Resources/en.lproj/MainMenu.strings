@@ -1,0 +1,91 @@
+
+/* Class = "NSMenu"; title = "AMainMenu"; ObjectID = "29"; */
+"29.title" = "AMainMenu";
+
+/* Class = "NSMenuItem"; title = "Rodan"; ObjectID = "56"; */
+"56.title" = "Rodan";
+
+/* Class = "NSMenu"; title = "Rodan"; ObjectID = "57"; */
+"57.title" = "Rodan";
+
+/* Class = "NSMenuItem"; title = "About Rodan"; ObjectID = "58"; */
+"58.title" = "About Rodan";
+
+/* Class = "NSMenuItem"; title = "Close Project"; ObjectID = "73"; */
+"73.title" = "Close Project";
+
+/* Class = "NSMenu"; title = "Project"; ObjectID = "81"; */
+"81.title" = "Project";
+
+/* Class = "NSMenuItem"; title = "New Project..."; ObjectID = "82"; */
+"82.title" = "New Project...";
+
+/* Class = "NSMenuItem"; title = "Project"; ObjectID = "83"; */
+"83.title" = "Project";
+
+/* Class = "NSMenuItem"; title = "Help"; ObjectID = "103"; */
+"103.title" = "Help";
+
+/* Class = "NSMenu"; title = "Help"; ObjectID = "106"; */
+"106.title" = "Help";
+
+/* Class = "NSMenuItem"; title = "Rodan Help"; ObjectID = "111"; */
+"111.title" = "Rodan Help";
+
+/* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "129"; */
+"129.title" = "Preferences…";
+
+/* Class = "NSMenuItem"; title = "Window"; ObjectID = "471"; */
+"471.title" = "Window";
+
+/* Class = "NSMenu"; title = "Window"; ObjectID = "472"; */
+"472.title" = "Window";
+
+/* Class = "NSMenuItem"; title = "Workflow Designer"; ObjectID = "473"; */
+"473.title" = "Workflow Designer";
+
+/* Class = "NSWindow"; title = "Window"; ObjectID = "477"; */
+"477.title" = "Window";
+
+/* Class = "NSToolbarItem"; label = "Pages"; ObjectID = "512"; */
+"512.label" = "Pages";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Pages"; ObjectID = "512"; */
+"512.paletteLabel" = "Pages";
+
+/* Class = "NSToolbarItem"; label = "Workflows"; ObjectID = "513"; */
+"513.label" = "Workflows";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Workflows"; ObjectID = "513"; */
+"513.paletteLabel" = "Workflows";
+
+/* Class = "NSMenuItem"; title = "Server"; ObjectID = "518"; */
+"518.title" = "Server";
+
+/* Class = "NSMenu"; title = "Server"; ObjectID = "519"; */
+"519.title" = "Server";
+
+/* Class = "NSMenuItem"; title = "Log out..."; ObjectID = "520"; */
+"520.title" = "Log out...";
+
+/* Class = "NSMenuItem"; title = "Debug"; ObjectID = "533"; */
+"533.title" = "Debug";
+
+/* Class = "NSMenu"; title = "Debug"; ObjectID = "534"; */
+"534.title" = "Debug";
+
+/* Class = "NSMenuItem"; title = "Get object info"; ObjectID = "535"; */
+"535.title" = "Get object info";
+
+/* Class = "NSTextFieldCell"; title = "Open or create a project to begin."; ObjectID = "554"; */
+"554.title" = "Open or create a project to begin.";
+
+/* Class = "NSMenuItem"; title = "Open Project..."; ObjectID = "555"; */
+"555.title" = "Open Project...";
+
+/* Class = "NSToolbarItem"; label = "Resources"; ObjectID = "565"; */
+"565.label" = "Resources";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Resources"; ObjectID = "565"; */
+"565.paletteLabel" = "Resources";
+
