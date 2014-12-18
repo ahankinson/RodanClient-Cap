@@ -11,10 +11,10 @@
 	<key>CPHumanReadableCopyright</key>
 	<string>Copyright © 2014, Andrew Hankinson All rights reserved.</string>
 	<key>CPBundleLocale</key>
-	<string>fr</string>
+	<string>en</string>
 
 	<key>ServerHost</key>
-	<string>//132.206.14.121:8001</string>
+	<string>//localhost:8001</string>
 	<key>AuthenticationType</key>
 	<string>session</string>
 	<key>AuthenticationToken</key>
