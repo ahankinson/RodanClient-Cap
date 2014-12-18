@@ -12,7 +12,10 @@
 
 @import "AppController.j"
 
-
+/*
+    This actually uses a customized version of the main method
+    for localized applications, defined in CPBundle+Localizable.j
+*/
 function main(args, namedArgs)
 {
     CPApplicationMain(args, namedArgs);
