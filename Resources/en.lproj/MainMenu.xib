@@ -294,6 +294,26 @@
 							<bool key="NSToolbarIsUserRemovable">YES</bool>
 							<int key="NSToolbarItemVisibilityPriority">0</int>
 						</object>
+						<object class="NSToolbarItem" key="45724FE2-1FDE-429B-AFC9-811C69BA8D2F" id="271328940">
+							<string key="NSToolbarItemIdentifier">45724FE2-1FDE-429B-AFC9-811C69BA8D2F</string>
+							<string key="NSToolbarItemLabel">Project</string>
+							<string key="NSToolbarItemPaletteLabel">Project</string>
+							<string key="NSToolbarItemToolTip"/>
+							<nil key="NSToolbarItemView"/>
+							<object class="NSCustomResource" key="NSToolbarItemImage">
+								<string key="NSClassName">NSImage</string>
+								<string key="NSResourceName">ProjectIcon</string>
+							</object>
+							<nil key="NSToolbarItemTarget"/>
+							<nil key="NSToolbarItemAction"/>
+							<string key="NSToolbarItemMinSize">{0, 0}</string>
+							<string key="NSToolbarItemMaxSize">{0, 0}</string>
+							<bool key="NSToolbarItemEnabled">YES</bool>
+							<bool key="NSToolbarItemAutovalidates">YES</bool>
+							<int key="NSToolbarItemTag">-1</int>
+							<bool key="NSToolbarIsUserRemovable">YES</bool>
+							<int key="NSToolbarItemVisibilityPriority">0</int>
+						</object>
 						<object class="NSToolbarItem" key="882D7BF0-D99A-4E42-B899-A54FAED68175" id="309312120">
 							<string key="NSToolbarItemIdentifier">882D7BF0-D99A-4E42-B899-A54FAED68175</string>
 							<string key="NSToolbarItemLabel">Resources</string>
@@ -416,15 +436,17 @@
 							</object>
 						</object>
 					</dictionary>
-					<array key="NSToolbarIBAllowedItems">
+					<array class="NSMutableArray" key="NSToolbarIBAllowedItems">
 						<reference ref="824356170"/>
 						<reference ref="953257973"/>
 						<reference ref="471377014"/>
 						<reference ref="449263052"/>
 						<reference ref="966581110"/>
 						<reference ref="309312120"/>
+						<reference ref="271328940"/>
 					</array>
 					<array key="NSToolbarIBDefaultItems">
+						<reference ref="271328940"/>
 						<reference ref="449263052"/>
 						<reference ref="966581110"/>
 						<reference ref="309312120"/>
@@ -433,7 +455,7 @@
 				</object>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="355300911">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<array class="NSMutableArray" key="NSSubviews">
 						<object class="NSCustomView" id="345923508">
@@ -445,6 +467,8 @@
 									<int key="NSvFlags">303</int>
 									<string key="NSFrame">{{330, 291}, {213, 17}}</string>
 									<reference key="NSSuperview" ref="345923508"/>
+									<reference key="NSWindow"/>
+									<reference key="NSNextKeyView"/>
 									<string key="NSReuseIdentifierKey">_NS:526</string>
 									<string key="NSHuggingPriority">{251, 750}</string>
 									<bool key="NSEnabled">YES</bool>
@@ -484,12 +508,15 @@
 							</array>
 							<string key="NSFrameSize">{870, 600}</string>
 							<reference key="NSSuperview" ref="355300911"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="501576902"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">NSView</string>
 						</object>
 					</array>
 					<string key="NSFrameSize">{870, 600}</string>
+					<reference key="NSSuperview"/>
+					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="345923508"/>
 					<string key="NSReuseIdentifierKey">_NS:20</string>
 				</object>
@@ -515,6 +542,9 @@
 			<object class="NSCustomObject" id="499113671">
 				<string key="NSClassName">OpenProjectWindowController</string>
 			</object>
+			<object class="NSCustomObject" id="848356047">
+				<string key="NSClassName">ProjectViewController</string>
+			</object>
 			<object class="NSArrayController" id="548181514">
 				<array class="NSMutableArray" key="NSDeclaredKeys">
 					<string>pk</string>
@@ -524,9 +554,10 @@
 					<string>projectOwner</string>
 					<string>created</string>
 					<string>updated</string>
+					<string>workflowCount</string>
+					<string>resourceCount</string>
 				</array>
 				<string key="NSObjectClassName">Project</string>
-				<bool key="NSEditable">YES</bool>
 				<object class="_NSManagedProxy" key="_NSManagedProxy"/>
 				<bool key="NSFilterRestrictsInsertion">YES</bool>
 			</object>
@@ -649,6 +680,22 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">newProjectWindowController</string>
+						<reference key="source" ref="635946545"/>
+						<reference key="destination" ref="732155626"/>
+					</object>
+					<int key="connectionID">575</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">projectViewController</string>
+						<reference key="source" ref="635946545"/>
+						<reference key="destination" ref="848356047"/>
+					</object>
+					<int key="connectionID">576</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">serverController</string>
 						<reference key="source" ref="661027212"/>
 						<reference key="destination" ref="417564949"/>
@@ -742,6 +789,22 @@
 						<reference key="destination" ref="273145747"/>
 					</object>
 					<int key="connectionID">564</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">resourceArrayController</string>
+						<reference key="source" ref="848356047"/>
+						<reference key="destination" ref="585219666"/>
+					</object>
+					<int key="connectionID">573</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">workflowArrayController</string>
+						<reference key="source" ref="848356047"/>
+						<reference key="destination" ref="1052308888"/>
+					</object>
+					<int key="connectionID">574</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -950,6 +1013,7 @@
 							<reference ref="449263052"/>
 							<reference ref="966581110"/>
 							<reference ref="309312120"/>
+							<reference ref="271328940"/>
 						</array>
 						<reference key="parent" ref="56880039"/>
 					</object>
@@ -1085,6 +1149,17 @@
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Resource Array Controller</string>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">571</int>
+						<reference key="object" ref="271328940"/>
+						<reference key="parent" ref="359755711"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">572</int>
+						<reference key="object" ref="848356047"/>
+						<reference key="parent" ref="0"/>
+						<string key="objectName">Project View Controller</string>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -1137,6 +1212,8 @@
 				<string key="566.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="568.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="57.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="571.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="572.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="58.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="73.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="79.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1148,9 +1225,390 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">569</int>
+			<int key="maxID">576</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">AppController</string>
+					<string key="superclassName">NSObject</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">activateProjectView:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">activateProjectView:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">activateProjectView:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="authenticationController">AuthenticationController</string>
+						<string key="blankApplicationView">NSView</string>
+						<string key="loadingViewController">LoadingViewController</string>
+						<string key="loginViewController">LoginViewController</string>
+						<string key="newProjectWindowController">NewProjectWindowController</string>
+						<string key="projectArrayController">NSArrayController</string>
+						<string key="projectViewController">ProjectViewController</string>
+						<string key="serverController">ServerController</string>
+						<string key="theToolbar">NSToolbar</string>
+						<string key="theWindow">NSWindow</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="authenticationController">
+							<string key="name">authenticationController</string>
+							<string key="candidateClassName">AuthenticationController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="blankApplicationView">
+							<string key="name">blankApplicationView</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="loadingViewController">
+							<string key="name">loadingViewController</string>
+							<string key="candidateClassName">LoadingViewController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="loginViewController">
+							<string key="name">loginViewController</string>
+							<string key="candidateClassName">LoginViewController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="newProjectWindowController">
+							<string key="name">newProjectWindowController</string>
+							<string key="candidateClassName">NewProjectWindowController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="projectArrayController">
+							<string key="name">projectArrayController</string>
+							<string key="candidateClassName">NSArrayController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="projectViewController">
+							<string key="name">projectViewController</string>
+							<string key="candidateClassName">ProjectViewController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="serverController">
+							<string key="name">serverController</string>
+							<string key="candidateClassName">ServerController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="theToolbar">
+							<string key="name">theToolbar</string>
+							<string key="candidateClassName">NSToolbar</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="theWindow">
+							<string key="name">theWindow</string>
+							<string key="candidateClassName">NSWindow</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../.XcodeSupport/AppController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">AuthenticationController</string>
+					<string key="superclassName">NSObject</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">serverController</string>
+						<string key="NS.object.0">ServerController</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">serverController</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">serverController</string>
+							<string key="candidateClassName">ServerController</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../.XcodeSupport/Controllers∕AuthenticationController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">LoadingViewController</string>
+					<string key="superclassName">NSViewController</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="loadingProgress">NSProgressIndicator</string>
+						<string key="loadingStatus">NSTextField</string>
+						<string key="rodanLogo">NSImageView</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="loadingProgress">
+							<string key="name">loadingProgress</string>
+							<string key="candidateClassName">NSProgressIndicator</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="loadingStatus">
+							<string key="name">loadingStatus</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="rodanLogo">
+							<string key="name">rodanLogo</string>
+							<string key="candidateClassName">NSImageView</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../.XcodeSupport/Controllers∕LoadingViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">LoginViewController</string>
+					<string key="superclassName">NSViewController</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="logIn:">id</string>
+						<string key="logOut:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="logIn:">
+							<string key="name">logIn:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="logOut:">
+							<string key="name">logOut:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="authenticationController">AuthenticationController</string>
+						<string key="loginButton">NSButton</string>
+						<string key="password">NSSecureTextField</string>
+						<string key="serverController">ServerController</string>
+						<string key="statusLabel">NSTextField</string>
+						<string key="username">NSTextField</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="authenticationController">
+							<string key="name">authenticationController</string>
+							<string key="candidateClassName">AuthenticationController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="loginButton">
+							<string key="name">loginButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="password">
+							<string key="name">password</string>
+							<string key="candidateClassName">NSSecureTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="serverController">
+							<string key="name">serverController</string>
+							<string key="candidateClassName">ServerController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="statusLabel">
+							<string key="name">statusLabel</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="username">
+							<string key="name">username</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../.XcodeSupport/Controllers∕LoginViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NewProjectWindowController</string>
+					<string key="superclassName">NSWindowController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">createProject:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">createProject:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">createProject:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="projectCreator">NSTextField</string>
+						<string key="projectDescription">NSTextField</string>
+						<string key="projectName">NSTextField</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="projectCreator">
+							<string key="name">projectCreator</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="projectDescription">
+							<string key="name">projectDescription</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="projectName">
+							<string key="name">projectName</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../.XcodeSupport/Controllers∕NewProjectWindowController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">OpenProjectWindowController</string>
+					<string key="superclassName">NSWindowController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">openProject:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">openProject:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">openProject:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="openProjectButton">NSButton</string>
+						<string key="projectController">ProjectController</string>
+						<string key="projectList">NSTableView</string>
+						<string key="serverController">ServerController</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="openProjectButton">
+							<string key="name">openProjectButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="projectController">
+							<string key="name">projectController</string>
+							<string key="candidateClassName">ProjectController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="projectList">
+							<string key="name">projectList</string>
+							<string key="candidateClassName">NSTableView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="serverController">
+							<string key="name">serverController</string>
+							<string key="candidateClassName">ServerController</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../.XcodeSupport/Controllers∕OpenProjectWindowController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">ProjectController</string>
+					<string key="superclassName">NSObject</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="projectArrayController">NSArrayController</string>
+						<string key="resourceArrayController">NSArrayController</string>
+						<string key="serverController">ServerController</string>
+						<string key="workflowArrayController">NSArrayController</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="projectArrayController">
+							<string key="name">projectArrayController</string>
+							<string key="candidateClassName">NSArrayController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="resourceArrayController">
+							<string key="name">resourceArrayController</string>
+							<string key="candidateClassName">NSArrayController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="serverController">
+							<string key="name">serverController</string>
+							<string key="candidateClassName">ServerController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="workflowArrayController">
+							<string key="name">workflowArrayController</string>
+							<string key="candidateClassName">NSArrayController</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../.XcodeSupport/Controllers∕ProjectController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">ProjectViewController</string>
+					<string key="superclassName">NSViewController</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="resourceArrayController">NSArrayController</string>
+						<string key="workflowArrayController">NSArrayController</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="resourceArrayController">
+							<string key="name">resourceArrayController</string>
+							<string key="candidateClassName">NSArrayController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="workflowArrayController">
+							<string key="name">workflowArrayController</string>
+							<string key="candidateClassName">NSArrayController</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../.XcodeSupport/Controllers∕ProjectViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">ServerController</string>
+					<string key="superclassName">NSObject</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="CSRFToken">CPCookie</string>
+						<string key="activeUser">User</string>
+						<string key="authenticationToken">NSString</string>
+						<string key="authenticationType">NSString</string>
+						<string key="configuration">NSDictionary</string>
+						<string key="refreshRate">NSNumber</string>
+						<string key="routes">NSDictionary</string>
+						<string key="server">NSString</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="CSRFToken">
+							<string key="name">CSRFToken</string>
+							<string key="candidateClassName">CPCookie</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="activeUser">
+							<string key="name">activeUser</string>
+							<string key="candidateClassName">User</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="authenticationToken">
+							<string key="name">authenticationToken</string>
+							<string key="candidateClassName">NSString</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="authenticationType">
+							<string key="name">authenticationType</string>
+							<string key="candidateClassName">NSString</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="configuration">
+							<string key="name">configuration</string>
+							<string key="candidateClassName">NSDictionary</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="refreshRate">
+							<string key="name">refreshRate</string>
+							<string key="candidateClassName">NSNumber</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="routes">
+							<string key="name">routes</string>
+							<string key="candidateClassName">NSDictionary</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="server">
+							<string key="name">server</string>
+							<string key="candidateClassName">NSString</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../.XcodeSupport/Controllers∕ServerController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">User</string>
+					<string key="superclassName">WLRemoteObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../.XcodeSupport/Models∕User.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">WorkflowViewController</string>
+					<string key="superclassName">NSViewController</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../.XcodeSupport/Controllers∕WorkflowViewController.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<bool key="IBDocument.previouslyAttemptedUpgradeToXcode5">NO</bool>
@@ -1168,6 +1626,7 @@
 			<string key="NSMenuCheckmark">{12, 12}</string>
 			<string key="NSMenuMixedState">{10, 2}</string>
 			<string key="PagesIcon">{57, 72}</string>
+			<string key="ProjectIcon">{72, 66}</string>
 			<string key="ResourcesIcon">{78, 73}</string>
 			<string key="WorkflowsIcon">{66, 69}</string>
 		</dictionary>
