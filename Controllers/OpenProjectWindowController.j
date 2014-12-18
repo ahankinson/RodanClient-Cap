@@ -31,6 +31,8 @@
     [projectList setDataSource:tableDelegate];
 
     [projectController loadProjectsOnPage:1];
+
+    [self close];
 }
 
 - (void)refreshProjectList:(CPNotification)aNotification
@@ -42,8 +44,13 @@
 
 - (@action)openProject:(id)aSender
 {
-    // TODO
-    CPLog.debug('open project');
+    var selectedRow = [projectList selectedRow],
+        paController = [projectController projectArrayController],
+        selectedProject = [[paController contentArray] objectAtIndex:selectedRow];
+
+    [projectController openProject:selectedProject];
+
+    [self close];
 }
 @end
 
@@ -109,5 +116,7 @@
     }
     return view;
 }
+
+
 
 @end

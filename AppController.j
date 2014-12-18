@@ -15,6 +15,7 @@
 @import "Controllers/ServerController.j"
 @import "Controllers/NewProjectWindowController.j"
 @import "Controllers/OpenProjectWindowController.j"
+@import "Controllers/ProjectViewController.j"
 @import "Controllers/LoadingViewController.j"
 @import "Controllers/LoginViewController.j"
 @import "Controllers/WorkflowViewController.j"
@@ -43,7 +44,8 @@ RodanServerWentAwayNotification = @"RodanServerWentAwayNotification";
 RodanMenubarAndToolbarAreReadyNotification = @"RodanMenubarAndToolbarAreReadyNotification";
 RodanRefreshProjectListNotification = @"RodanRefreshProjectListNotification"
 RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
-
+RodanProjectWasMadeActiveProject = @"RodanProjectWasMadeActiveProject";
+RodanProjectDidFinishLoading = @"RodanProjectDidFinishLoading";
 
 @implementation AppController : CPObject
 {
@@ -54,6 +56,7 @@ RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
     @outlet     ServerController            serverController          @accessors(readonly);
     @outlet     AuthenticationController    authenticationController;
     @outlet     NewProjectWindowController  newProjectWindowController;
+    @outlet     ProjectViewController       projectViewController;
     @outlet     CPArrayController           projectArrayController    @accessors;
     @outlet     CPView                      blankApplicationView;
 
@@ -114,6 +117,11 @@ RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
     [[CPNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(displayBlankApplicationView:)
                                                  name:RodanMenubarAndToolbarAreReadyNotification
+                                               object:nil];
+
+    [[CPNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(activateProjectView:)
+                                                 name:RodanProjectDidFinishLoading
                                                object:nil];
 
     // Establish the server routes.
@@ -244,12 +252,12 @@ RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
 
 // #pragma mark - Private Implementation
 
-// - (void)_showProjectView
-// {
-//     var projectView = [projectViewController view];
-//     [projectView setFrame:[contentScrollView bounds]];
-//     [projectView setAutoresizingMask:CPViewWidthSizable];
-//     [contentScrollView setDocumentView:projectView];
-// }
+- (void)_showProjectView
+{
+    var projectView = [projectViewController view];
+    [projectView setFrame:[contentScrollView bounds]];
+    [projectView setAutoresizingMask:CPViewWidthSizable];
+    [contentScrollView setDocumentView:projectView];
+}
 
 @end

@@ -2,12 +2,14 @@
 
 @global RodanDidLoadProjectsNotification
 @global RodanRefreshProjectListNotification
+@global RodanProjectWasMadeActiveProject
+@global RodanProjectDidFinishLoading
 
 @class ServerController
 
 @implementation ProjectController : CPObject
 {
-                Project              currentlyActiveProject     @accessors;
+                Project              currentlyActiveProject     @accessors(readonly);
     @outlet     ServerController          serverController;
     @outlet     CPArrayController    projectArrayController     @accessors;
     @outlet     CPArrayController   workflowArrayController     @accessors;
@@ -22,11 +24,16 @@
     {
         CPLog.debug('initializing project controller');
 
-        _currentlyLoadingPage = 0;  // there is no page 0.
+        _currentlyLoadingPage = 0;  // there is no page 0, so this is a safe initial value.
 
         [[CPNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(refreshProjectList:)
                                                      name:RodanRefreshProjectListNotification
+                                                   object:nil];
+
+        [[CPNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(setCurrentlyActiveProject:)
+                                                     name:RodanProjectWasMadeActiveProject
                                                    object:nil];
     }
 
@@ -49,12 +56,41 @@
     [selectedObjects makeObjectsPerformSelector:@selector(ensureDeleted)];
 }
 
+- (void)openProject:(Project)aProject
+{
+    /*
+        When fetching the list of projects, a minimal representation without all the workflow
+        and resource objects is fetched. Calling reload on a single project object will hit the
+        remote endpoint for a single object, where the workflow and resource objects *are* returned.
+        This will update the project object with the new info.
+
+        When this fires, a delegate on the Project object itself will receive the response and kick
+        off the rest of the project opening process.
+    */
+    [aProject ensureLoaded];
+}
+
+- (void)setCurrentlyActiveProject:(CPNotification)aNotification
+{
+    var theProject = [aNotification object];
+
+    currentlyActiveProject = theProject;
+
+    [workflowArrayController setContent:[theProject workflows]];
+    [resourceArrayController setContent:[theProject resources]];
+
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanProjectDidFinishLoading
+                                                        object:nil];
+}
+
 - (void)refreshProjectList:(CPNotification)aNotification
 {
     // loading page 1 should restart the loading process.
     [[self projectArrayController] setContent:[]];
     [self loadProjectsOnPage:1];
 }
+
+#pragma mark Project Listings
 
 - (void)loadProjectsOnPage:(CPInteger)pageNumber
 {
@@ -95,8 +131,6 @@
 
     var response = [anAction result],
         results = response.results;
-
-    console.log(results);
 
     if (!numberOfProjects)
         numberOfProjects = response.count;
