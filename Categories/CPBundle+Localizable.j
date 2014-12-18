@@ -100,8 +100,6 @@ CPApplicationMain = function(args, namedArgs)
     var mainBundle = [CPBundle mainBundle],
         bundleLocale = [mainBundle bundleLocale];
 
-    console.log(bundleLocale);
-
     if (bundleLocale)
     {
         var request = [CPURLRequest requestWithURL:@"Resources/" + bundleLocale + ".lproj/Localizable.xstrings"],
