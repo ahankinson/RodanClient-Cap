@@ -10,7 +10,7 @@
 
 - (id)init
 {
-    var localizedCibFile = [[CPBundle mainBundle] bundleLocale] + @".lproj/NewProjectWindow.cib";
+    var localizedCibFile = [[CPBundle mainBundle] bundleLocale] + @".lproj/NewProjectWindow";
     if (self = [self initWithWindowCibName:localizedCibFile
                                      owner:self])
     {

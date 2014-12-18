@@ -12,7 +12,7 @@
 
 - (id)init
 {
-    var localizedCibFile = [[CPBundle mainBundle] bundleLocale] + @".lproj/OpenProjectWindow.cib";
+    var localizedCibFile = [[CPBundle mainBundle] bundleLocale] + @".lproj/OpenProjectWindow";
     if (self = [self initWithWindowCibName:localizedCibFile owner:self])
     {
         [[CPNotificationCenter defaultCenter] addObserver:self

@@ -13,7 +13,7 @@
 
 - (id)initWithCibName:(CPString)aNibName bundle:(CPBundle)aBundle
 {
-    var localizedCibFile = [[CPBundle mainBundle] bundleLocale] + @".lproj/LoadingView.cib";
+    var localizedCibFile = [[CPBundle mainBundle] bundleLocale] + @".lproj/LoadingView";
     if (self = [super initWithCibName:localizedCibFile bundle:nil])
     {
         CPLog.debug(@"Initializing Loading Status View");

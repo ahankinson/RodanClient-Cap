@@ -17,7 +17,7 @@
 
 - (id)init
 {
-    var localizedCibFile = [[CPBundle mainBundle] bundleLocale] + @".lproj/LoginView.cib";
+    var localizedCibFile = [[CPBundle mainBundle] bundleLocale] + @".lproj/LoginView";
     if (self = [super initWithCibName:localizedCibFile bundle:nil])
     {
         var shadowView = [[CPShadowView alloc] initWithFrame:[[self view] bounds]];
