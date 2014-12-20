@@ -76,8 +76,15 @@
 
     currentlyActiveProject = theProject;
 
-    [workflowArrayController setContent:[theProject workflows]];
-    [resourceArrayController setContent:[theProject resources]];
+    [workflowArrayController bind:@"contentArray"
+                         toObject:theProject
+                      withKeyPath:@"workflows"
+                          options:nil];
+
+    [resourceArrayController bind:@"contentArray"
+                         toObject:theProject
+                      withKeyPath:@"resources"
+                          options:nil];
 
     [[CPNotificationCenter defaultCenter] postNotificationName:RodanProjectDidFinishLoading
                                                         object:nil];

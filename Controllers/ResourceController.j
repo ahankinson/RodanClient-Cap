@@ -1,0 +1,6 @@
+
+@implementation ResourceController : CPObject
+{
+}
+
+@end

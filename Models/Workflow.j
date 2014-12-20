@@ -7,6 +7,7 @@
 {
     CPString        uuid        @accessors;
     CPString        pk          @accessors;
+    CPString        name        @accessors;
     Project         project     @accessors;
     CPString        description @accessors;
     User            creator     @accessors;
@@ -33,6 +34,7 @@
     return [
         ['pk', 'url', nil, YES],
         ['uuid', 'uuid', nil, YES],
+        ['name', 'name'],
         ['project', 'project', [WLForeignObjectTransformer forObjectClass:Project]],
         ['description', 'description'],
         ['creator', 'creator', [WLForeignObjectTransformer forObjectClass:User]],
