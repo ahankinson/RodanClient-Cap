@@ -25,19 +25,24 @@
     return self;
 }
 
+- (void)windowWillLoad
+{
+    CPLog.debug(@"Window will load");
+}
+
 - (void)windowDidLoad
 {
+    [[self window] setDelegate:self];
+
     var tableDelegate = [[ProjectListTableDelegate alloc] initWithProjectController:projectController];
     [projectList setDelegate:tableDelegate];
     [projectList setDataSource:tableDelegate];
-
     [projectController loadProjectsOnPage:1];
-
-    [self close];
 }
 
 - (void)refreshProjectList:(CPNotification)aNotification
 {
+    CPLog.debug(@"Refreshing project list");
     [projectList reloadData];
 }
 
@@ -54,6 +59,16 @@
 
     [self close];
 }
+
+#pragma mark Window Delegate Methods
+
+- (void)windowDidBecomeKey:(CPNotification)aNotification
+{
+    CPLog.debug(@"Window did become key");
+
+    [projectController loadProjectsOnPage:1];
+}
+
 @end
 
 
@@ -64,7 +79,7 @@
 
 - (id)initWithProjectController:(ProjectController)aProjectController
 {
-    if (self = [self init])
+    if (self = [super init])
     {
         _projectController = aProjectController;
     }
@@ -118,7 +133,5 @@
     }
     return view;
 }
-
-
 
 @end

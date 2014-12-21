@@ -1,6 +1,7 @@
 @import <AppKit/CPViewController.j>
 
 @global RodanDidFinishLoadingProjectNotification
+@global RodanWillCloseProjectNotification
 
 @implementation ProjectViewController : CPViewController
 {
@@ -27,9 +28,9 @@
         CPLog.debug(@"Initializing Project View Controller");
 
         [[CPNotificationCenter defaultCenter] addObserver:self
-                                         selector:@selector(activateProjectView:)
-                                             name:RodanDidFinishLoadingProjectNotification
-                                           object:nil];
+                                                 selector:@selector(activateProjectView:)
+                                                     name:RodanDidFinishLoadingProjectNotification
+                                                   object:nil];
 
     }
 
@@ -87,6 +88,8 @@
 - (@action)closeProject:(id)aSender
 {
     CPLog.debug(@"Closing Project");
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanWillCloseProjectNotification
+                                                        object:nil];
 }
 
 @end

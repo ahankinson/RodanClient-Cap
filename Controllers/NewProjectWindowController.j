@@ -1,5 +1,6 @@
 @import <AppKit/CPWindowController.j>
 
+@global RodanWillCreateProjectNotification
 
 @implementation NewProjectWindowController : CPWindowController
 {
@@ -29,8 +30,13 @@
 
 - (@action)createProject:(id)aSender
 {
-    var pname = [projectName objectValue],
-        pdesc = [projectDescription objectValue];
+    var projectInfo = @{
+        "projectName": [projectName objectValue],
+        "projectDescription": [projectDescription objectValue]
+        };
+
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanWillCreateProjectNotification
+                                                        object:projectInfo];
 
     // [projectController newProjectWithName:pname andDescription:pdesc];
 

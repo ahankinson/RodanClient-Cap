@@ -51,6 +51,8 @@
         refreshRate = [mainBundle objectForInfoDictionaryKey:@"RefreshRate"];
         CSRFToken = [[CPCookie alloc] initWithName:@"csrftoken"];
 
+        // All Ratatosk communication will go through the Server controller to
+        // have the appropriate authentication headers set.
         [[WLRemoteLink sharedRemoteLink] setDelegate:self];
 
         [[CPNotificationCenter defaultCenter] addObserver:self

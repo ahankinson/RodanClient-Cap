@@ -58,7 +58,8 @@ RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
 
 RodanShouldLoadProjectNotification = @"RodanShouldLoadProjectNotification";
 RodanDidLoadProjectNotification = @"RodanDidLoadProjectNotification";
-RodanDidCreateProjectNotification = @"RodanProjectWasCreatedNotification";
+RodanWillCreateProjectNotification = @"RodanWillCreateProjectNotification";
+RodanDidCreateProjectNotification = @"RodanDidCreateProjectNotification";
 RodanDidFinishLoadingProjectNotification = @"RodanDidFinishLoadingProjectNotification";
 RodanWillCloseProjectNotification = @"RodanWillCloseProjectNotification";
 
@@ -108,6 +109,11 @@ RodanWillCloseProjectNotification = @"RodanWillCloseProjectNotification";
     [[CPNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(displayBlankApplicationView:)
                                                  name:RodanMenubarAndToolbarAreReadyNotification
+                                               object:nil];
+
+    [[CPNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(displayBlankApplicationView:)
+                                                 name:RodanWillCloseProjectNotification
                                                object:nil];
 
     // Establish the server routes.

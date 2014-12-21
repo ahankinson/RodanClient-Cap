@@ -5,6 +5,8 @@
 @global RodanShouldLoadProjectNotification
 @global RodanDidLoadProjectNotification  // NB Pluralization!
 @global RodanDidFinishLoadingProjectNotification
+@global RodanWillCloseProjectNotification
+@global RodanWillCreateProjectNotification
 
 
 @class ServerController
@@ -42,6 +44,16 @@
                                                  selector:@selector(setCurrentlyActiveProject:)
                                                      name:RodanDidLoadProjectNotification
                                                    object:nil];
+
+        [[CPNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(closeProject:)
+                                                     name:RodanWillCloseProjectNotification
+                                                   object:nil];
+
+        [[CPNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(createProject:)
+                                                     name:RodanWillCreateProjectNotification
+                                                   object:nil];
     }
 
     return self;
@@ -53,6 +65,7 @@
     [newProject setProjectName:aName];
     [newProject setProjectDescription:aDescription];
     [projectArrayController addObject:newProject];
+
     [newProject ensureCreated];
 }
 
@@ -97,6 +110,25 @@
 
     [[CPNotificationCenter defaultCenter] postNotificationName:RodanDidFinishLoadingProjectNotification
                                                         object:nil];
+}
+
+- (void)createProject:(CPNotification)aNotification
+{
+    var projectInfo = [aNotification object];
+
+    [self newProjectWithName:[projectInfo valueForKey:@"projectName"]
+              andDescription:[projectInfo valueForKey:@"projectDescription"]];
+}
+
+- (void)closeProject:(CPNotification)aNotification
+{
+    [workflowArrayController unbind:@"contentArray"];
+    [workflowArrayController setContent:nil];
+
+    [resourceArrayController unbind:@"contentArray"];
+    [resourceArrayController setContent:nil];
+
+    currentlyActiveProject = nil;
 }
 
 - (void)refreshProjectList:(CPNotification)aNotification
@@ -156,8 +188,12 @@
         startingIndex = ((page - 1) * [self objectsPerPage]),
         idxSet = [CPIndexSet indexSetWithIndexesInRange:CPMakeRange(startingIndex, results.length)];
 
+    console.log(idxSet);
+
     var p = [Project objectsFromJson:results];
     [[projectArrayController contentArray] insertObjects:p atIndexes:idxSet];
+
+    console.log([projectArrayController contentArray]);
 
     [[CPNotificationCenter defaultCenter] postNotificationName:RodanDidLoadProjectsNotification
                                                         object:nil];
