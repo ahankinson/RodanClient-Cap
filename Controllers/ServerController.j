@@ -43,6 +43,7 @@
 {
     if (self = [super init])
     {
+        CPLog.debug(@"Initializing Server Controller");
         var mainBundle = [CPBundle mainBundle];
 
         server = [mainBundle objectForInfoDictionaryKey:@"ServerHost"];
@@ -56,8 +57,6 @@
                                                  selector:@selector(setClientConfiguration:)
                                                      name:RodanServerConfigurationHasReturnedNotification
                                                    object:nil];
-
-        CPLog.debug(@"Server Controller initialized");
     }
 
     return self;

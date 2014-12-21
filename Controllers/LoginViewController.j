@@ -3,6 +3,7 @@
 @import "ServerController.j"
 
 @global RodanFailedLogInNotification
+@global RodanMustLogInNotification
 
 
 @implementation LoginViewController : CPViewController
@@ -30,6 +31,12 @@
                                                      name:RodanFailedLogInNotification
                                                    object:nil];
 
+        [[CPNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(showLoginWindowView:)
+                                                     name:RodanMustLogInNotification
+                                                   object:nil];
+
+
         [[self statusLabel] setObjectValue:@""];
     }
 
@@ -49,6 +56,21 @@
 {
     CPLog.debug(@"Application Log Out");
     [authenticationController logOut];
+}
+
+- (void)showLoginWindowView:(CPNotification)aNotification
+{
+    CPLog.debug(@"Show Login Window View");
+
+    var loginView = [self view],
+        loginViewMidX = CGRectGetWidth([loginView frame]) / 2,
+        loginViewMidY = CGRectGetHeight([loginView frame]) / 2,
+        contentScrollView = [[CPApp delegate] contentScrollView],
+        scrollViewCenter = [contentScrollView center];
+
+    [loginView setFrameOrigin:CGPointMake(scrollViewCenter.x - loginViewMidX, scrollViewCenter.y - loginViewMidY)];
+    [loginView setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
+    [contentScrollView setDocumentView:loginView];
 }
 
 - (void)warnUserOfFailedLogin:(CPNotification)aNotification

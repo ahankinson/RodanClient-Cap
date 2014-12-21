@@ -1,5 +1,7 @@
 @import <AppKit/CPViewController.j>
 
+@global RodanDidFinishLoadingProjectNotification
+
 @implementation ProjectViewController : CPViewController
 {
     @outlet     ProjectController             projectController;
@@ -22,6 +24,13 @@
 
     if (self = [super initWithCibName:localizedCibFile bundle:nil])
     {
+        CPLog.debug(@"Initializing Project View Controller");
+
+        [[CPNotificationCenter defaultCenter] addObserver:self
+                                         selector:@selector(activateProjectView:)
+                                             name:RodanDidFinishLoadingProjectNotification
+                                           object:nil];
+
     }
 
     return self;
@@ -62,26 +71,22 @@
                 toObject:currentlyActiveProject
              withKeyPath:@"projectCreator.username"
                  options:nil];
+}
 
-    // [projectOverviewWorkflowTableView bind:@"content"
-    //                               toObject:workflowArrayController
-    //                            withKeyPath:@"arrangedObjects"
-    //                                options:nil];
+- (void)activateProjectView:(CPNotification)aNotification
+{
+    var projectView = [self view],
+        contentScrollView = [[CPApp delegate] contentScrollView];
 
-    // [projectOverviewWorkflowTableView bind:@"selectionIndexes"
-    //                               toObject:workflowArrayController
-    //                            withKeyPath:@"selectionIndexes"
-    //                                options:nil];
+    [projectView setFrame:[contentScrollView bounds]];
+    [projectView setAutoresizingMask:CPViewWidthSizable];
+    [contentScrollView setDocumentView:projectView];
 
-    // [projectOverviewResourceTableView bind:@"content"
-    //                               toObject:resourceArrayController
-    //                            withKeyPath:@"arrangedObjects"
-    //                                options:nil];
+}
 
-    // [projectOverviewResourceTableView bind:@"selectionIndexes"
-    //                               toObject:resourceArrayController
-    //                            withKeyPath:@"selectionIndexes"
-    //                                options:nil];
+- (@action)closeProject:(id)aSender
+{
+    CPLog.debug(@"Closing Project");
 }
 
 @end

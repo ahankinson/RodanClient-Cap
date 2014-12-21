@@ -2,8 +2,10 @@
 
 @global RodanDidLoadProjectsNotification
 @global RodanRefreshProjectListNotification
-@global RodanProjectWasMadeActiveProject
-@global RodanProjectDidFinishLoading
+@global RodanShouldLoadProjectNotification
+@global RodanDidLoadProjectNotification  // NB Pluralization!
+@global RodanDidFinishLoadingProjectNotification
+
 
 @class ServerController
 
@@ -22,7 +24,7 @@
 {
     if (self = [super init])
     {
-        CPLog.debug('initializing project controller');
+        CPLog.debug('Initializing Project Controller');
 
         _currentlyLoadingPage = 0;  // there is no page 0, so this is a safe initial value.
 
@@ -32,17 +34,24 @@
                                                    object:nil];
 
         [[CPNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(loadProject:)
+                                                     name:RodanShouldLoadProjectNotification
+                                                   object:nil];
+
+        [[CPNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(setCurrentlyActiveProject:)
-                                                     name:RodanProjectWasMadeActiveProject
+                                                     name:RodanDidLoadProjectNotification
                                                    object:nil];
     }
 
     return self;
 }
 
-- (void)newProject
+- (void)newProjectWithName:(CPString)aName andDescription:(CPString)aDescription
 {
-    var newProject = [[Project alloc] initWithCreator:[[serverController activeUser] pk]];
+    var newProject = [[Project alloc] initWithCreator:[serverController activeUser]];
+    [newProject setProjectName:aName];
+    [newProject setProjectDescription:aDescription];
     [projectArrayController addObject:newProject];
     [newProject ensureCreated];
 }
@@ -56,7 +65,7 @@
     [selectedObjects makeObjectsPerformSelector:@selector(ensureDeleted)];
 }
 
-- (void)openProject:(Project)aProject
+- (void)loadProject:(CPNotification)aNotification
 {
     /*
         When fetching the list of projects, a minimal representation without all the workflow
@@ -67,7 +76,7 @@
         When this fires, a delegate on the Project object itself will receive the response and kick
         off the rest of the project opening process.
     */
-    [aProject ensureLoaded];
+    [[aNotification object] ensureLoaded];
 }
 
 - (void)setCurrentlyActiveProject:(CPNotification)aNotification
@@ -86,7 +95,7 @@
                       withKeyPath:@"resources"
                           options:nil];
 
-    [[CPNotificationCenter defaultCenter] postNotificationName:RodanProjectDidFinishLoading
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanDidFinishLoadingProjectNotification
                                                         object:nil];
 }
 

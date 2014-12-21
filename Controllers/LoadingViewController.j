@@ -18,6 +18,21 @@
     {
         CPLog.debug(@"Initializing Loading Status View");
 
+        [[CPNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(updateProgressAndStatus:)
+                                                     name:RodanClientConfigurationWillStartNotification
+                                                   object:nil];
+
+        [[CPNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(updateProgressAndStatus:)
+                                                     name:RodanClientConfigurationHasFinishedNotification
+                                                   object:nil];
+
+        [[CPNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(updateProgressAndStatus:)
+                                                     name:RodanServerWentAwayNotification
+                                                   object:nil];
+
         var shadowView = [[CPShadowView alloc] initWithFrame:[[self view] bounds]];
         [[self view] addSubview:shadowView];
         [[self view] setNeedsLayout];

@@ -1,16 +1,22 @@
 @import <Foundation/Foundation.j>
 @import <AppKit/AppKit.j>
-
+@import "Models/Job.j"
 @import "Models/Output.j"
+@import "Models/OutputPort.j"
+@import "Models/OutputPortType.j"
 @import "Models/Project.j"
 @import "Models/Resource.j"
 @import "Models/ResourceType.j"
 @import "Models/RunJob.j"
 @import "Models/User.j"
 @import "Models/Workflow.j"
+@import "Models/WorkflowJob.j"
+@import "Models/WorkflowRun.j"
 @import "Categories/CPButtonBar+PopupButton.j"
 @import "Categories/CPURLConnection+AsyncBlock.j"
 @import "Categories/WLRemoteObject+RemotePath.j"
+@import "Controllers/ResourceController.j"
+@import "Controllers/WorkflowController.j"
 @import "Controllers/ProjectController.j"
 @import "Controllers/ServerController.j"
 @import "Controllers/NewProjectWindowController.j"
@@ -42,10 +48,20 @@ RodanAuthenticationSuccessNotification = @"RodanAuthenticationSuccessNotificatio
 
 RodanServerWentAwayNotification = @"RodanServerWentAwayNotification";
 RodanMenubarAndToolbarAreReadyNotification = @"RodanMenubarAndToolbarAreReadyNotification";
+
+#pragma mark Project Listing Notifications
+
 RodanRefreshProjectListNotification = @"RodanRefreshProjectListNotification"
 RodanDidLoadProjectsNotification = @"RodanDidLoadProjectsNotification";
-RodanProjectWasMadeActiveProject = @"RodanProjectWasMadeActiveProject";
-RodanProjectDidFinishLoading = @"RodanProjectDidFinishLoading";
+
+#pragma mark Project Loading Notifications
+
+RodanShouldLoadProjectNotification = @"RodanShouldLoadProjectNotification";
+RodanDidLoadProjectNotification = @"RodanDidLoadProjectNotification";
+RodanDidCreateProjectNotification = @"RodanProjectWasCreatedNotification";
+RodanDidFinishLoadingProjectNotification = @"RodanDidFinishLoadingProjectNotification";
+RodanWillCloseProjectNotification = @"RodanWillCloseProjectNotification";
+
 
 @implementation AppController : CPObject
 {
@@ -60,7 +76,7 @@ RodanProjectDidFinishLoading = @"RodanProjectDidFinishLoading";
     @outlet     CPArrayController           projectArrayController    @accessors;
     @outlet     CPView                      blankApplicationView;
 
-                CPScrollView                contentScrollView;
+                CPScrollView                contentScrollView         @accessors;
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
@@ -74,31 +90,6 @@ RodanProjectDidFinishLoading = @"RodanProjectDidFinishLoading";
     [theToolbar setVisible:NO];
 
     // Register the callback methods for when the routes have finished loading.
-    [[CPNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(checkAuthenticationStatus:)
-                                                 name:RodanClientConfigurationHasFinishedNotification
-                                               object:nil];
-
-    [[CPNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(showLoginWindowView:)
-                                                 name:RodanMustLogInNotification
-                                               object:nil];
-
-    [[CPNotificationCenter defaultCenter] addObserver:loadingViewController
-                                             selector:@selector(updateProgressAndStatus:)
-                                                 name:RodanClientConfigurationWillStartNotification
-                                               object:nil];
-
-    [[CPNotificationCenter defaultCenter] addObserver:loadingViewController
-                                             selector:@selector(updateProgressAndStatus:)
-                                                 name:RodanClientConfigurationHasFinishedNotification
-                                               object:nil];
-
-    [[CPNotificationCenter defaultCenter] addObserver:loadingViewController
-                                             selector:@selector(updateProgressAndStatus:)
-                                                 name:RodanServerWentAwayNotification
-                                               object:nil];
-
     [[CPNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(enableMenubarAndToolbarOnAuthentication:)
                                                  name:RodanAuthenticationSuccessNotification
@@ -117,11 +108,6 @@ RodanProjectDidFinishLoading = @"RodanProjectDidFinishLoading";
     [[CPNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(displayBlankApplicationView:)
                                                  name:RodanMenubarAndToolbarAreReadyNotification
-                                               object:nil];
-
-    [[CPNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(activateProjectView:)
-                                                 name:RodanProjectDidFinishLoading
                                                object:nil];
 
     // Establish the server routes.
@@ -146,9 +132,6 @@ RodanProjectDidFinishLoading = @"RodanProjectDidFinishLoading";
     [loadingView setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
 
     [contentScrollView setDocumentView:loadingView];
-    // [loadingView setAutoresizingMask:CPViewWidthSizable];
-    // [loadingView setFrame:[contentScrollView bounds]];
-
 
     CPLog.debug(@"Application finished launching");
 }
@@ -181,33 +164,14 @@ RodanProjectDidFinishLoading = @"RodanProjectDidFinishLoading";
     [contentScrollView setDocumentView:blankApplicationView];
 }
 
-/**
- * @brief Checks the user's authentication status against the server
+/*
+ *  If the Rodan server is not reachable, show a message.
  */
-- (void)checkAuthenticationStatus:(CPNotification)aNotification
-{
-    [authenticationController checkAuthenticationStatus];
-}
-
-- (void)showLoginWindowView:(CPNotification)aNotification
-{
-    CPLog.debug(@"Show Login Window View");
-
-    var loginView = [loginViewController view],
-        loginViewMidX = CGRectGetWidth([loginView frame]) / 2,
-        loginViewMidY = CGRectGetHeight([loginView frame]) / 2,
-        scrollViewCenter = [contentScrollView center];
-
-    [loginView setFrameOrigin:CGPointMake(scrollViewCenter.x - loginViewMidX, scrollViewCenter.y - loginViewMidY)];
-    [loginView setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
-    [contentScrollView setDocumentView:loginView];
-}
-
 - (void)serverWentAway:(CPNotificationCenter)aNotification
 {
     var alert = [[CPAlert alloc] init];
 
-    [alert setMessageText:@"The Rodan server could not be contacted"];
+    [alert setMessageText:CPLocalizedString(@"The Rodan server could not be contacted", @"The Rodan server could not be contacted")];
     [alert setDelegate:self];
     [alert setAlertStyle:CPCriticalAlertStyle];
     [alert addButtonWithTitle:CPLocalizedString(@"Dismiss", @"Dismiss")];
@@ -220,11 +184,6 @@ RodanProjectDidFinishLoading = @"RodanProjectDidFinishLoading";
 
 #pragma mark Action Handlers
 
-
-- (@action)activateProjectView:(id)aSender
-{
-    [self _showProjectView];
-}
 
 - (void)awakeFromCib
 {
@@ -248,16 +207,6 @@ RodanProjectDidFinishLoading = @"RodanProjectDidFinishLoading";
     }
 
     [theWindow setFullPlatformWindow:YES];
-}
-
-// #pragma mark - Private Implementation
-
-- (void)_showProjectView
-{
-    var projectView = [projectViewController view];
-    [projectView setFrame:[contentScrollView bounds]];
-    [projectView setAutoresizingMask:CPViewWidthSizable];
-    [contentScrollView setDocumentView:projectView];
 }
 
 @end

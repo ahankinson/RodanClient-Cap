@@ -27,13 +27,33 @@
 @global RodanDidLogInNotification
 @global RodanDidLogOutNotification
 @global RodanAuthenticationSuccessNotification
+@global RodanClientConfigurationHasFinishedNotification
 
 @implementation AuthenticationController : CPObject
 {
     @outlet         ServerController    serverController;
 }
 
-- (void)checkAuthenticationStatus
+- (id)init
+{
+    if (self = [super init])
+    {
+        [[CPNotificationCenter defaultCenter] addObserver:self
+                                         selector:@selector(checkAuthenticationStatus:)
+                                             name:RodanClientConfigurationHasFinishedNotification
+                                           object:nil];
+
+    }
+
+    return self;
+}
+
+- (void)checkAuthenticationStatus:(CPNotification)aNotification
+{
+    [self _checkAuthenticationStatus];
+}
+
+- (void)_checkAuthenticationStatus
 {
     var authURLRequest = [serverController statusRoute];
     [authURLRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];

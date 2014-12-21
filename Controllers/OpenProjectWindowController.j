@@ -1,6 +1,7 @@
 @import <AppKit/CPWindowController.j>
 
 @global RodanDidLoadProjectsNotification
+@global RodanShouldLoadProjectNotification
 
 @implementation OpenProjectWindowController : CPWindowController
 {
@@ -48,7 +49,8 @@
         paController = [projectController projectArrayController],
         selectedProject = [[paController contentArray] objectAtIndex:selectedRow];
 
-    [projectController openProject:selectedProject];
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanShouldLoadProjectNotification
+                                                        object:selectedProject];
 
     [self close];
 }
