@@ -10,7 +10,8 @@
 @class Workflow
 @class Resource
 
-@global RodanProjectWasMadeActiveProject
+@global RodanDidLoadProjectNotification
+@global RodanDidCreateProjectNotification
 
 /*
  *  This class is a reference for other Model objects. Other model objects
@@ -104,7 +105,13 @@
 
 - (void)remoteObjectWasLoaded:(Project)aProject
 {
-    [[CPNotificationCenter defaultCenter] postNotificationName:RodanProjectWasMadeActiveProject
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanDidLoadProjectNotification
+                                                        object:aProject];
+}
+
+- (void)remoteObjectWasCreated:(Project)aProject
+{
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanDidCreateProjectNotification
                                                         object:aProject];
 }
 
