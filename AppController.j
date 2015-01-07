@@ -63,6 +63,19 @@ RodanDidCreateProjectNotification = @"RodanDidCreateProjectNotification";
 RodanDidFinishLoadingProjectNotification = @"RodanDidFinishLoadingProjectNotification";
 RodanWillCloseProjectNotification = @"RodanWillCloseProjectNotification";
 
+#pragma mark Project View Notifications
+
+RodanShouldShowProjectViewNotification = @"RodanShouldShowProjectViewNotification";
+
+#pragma mark Workflow Loading Notifications
+
+RodanShouldLoadWorkflowNotification = @"RodanShouldLoadWorkflowNotification";
+RodanDidFinishLoadingWorkflowNotification = @"RodanDidFinishLoadingWorkflowNotification";
+
+#pragma mark Workflow View Notifications
+
+RodanShouldShowWorkflowViewNotification = @"RodanShouldShowWorkflowViewNotification";
+
 
 @implementation AppController : CPObject
 {
@@ -190,6 +203,19 @@ RodanWillCloseProjectNotification = @"RodanWillCloseProjectNotification";
 
 #pragma mark Action Handlers
 
+- (@action)showProjectView:(id)aSender
+{
+    CPLog.debug(@"Showing Project View");
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanShouldShowProjectViewNotification
+                                                        object:nil];
+}
+
+- (@action)showWorkflowView:(id)aSender
+{
+    CPLog.debug(@"Showing Workflow View");
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanShouldShowWorkflowViewNotification
+                                                        object:nil];
+}
 
 - (void)awakeFromCib
 {
