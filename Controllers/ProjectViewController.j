@@ -27,9 +27,16 @@
     {
         CPLog.debug(@"Initializing Project View Controller");
 
+        // see note on showProjectWhenLoaded: for an explanation of this notification
+        [[CPNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(showProjectWhenLoaded:)
+                                                     name:RodanDidFinishLoadingProjectNotification
+                                                   object:nil];
+
+
         [[CPNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(activateProjectView:)
-                                                     name:RodanDidFinishLoadingProjectNotification
+                                                     name:RodanShouldShowProjectViewNotification
                                                    object:nil];
 
     }
@@ -72,6 +79,17 @@
                 toObject:currentlyActiveProject
              withKeyPath:@"projectCreator.username"
                  options:nil];
+}
+
+/*
+ * Rodan will display the project view immediately after the project
+ * has been loaded. Since the project view is special in this regard,
+ * we have to add another method to handle this case explicitly.
+ **/
+- (void)showProjectWhenLoaded:(CPNotification)aNotification
+{
+    [[CPNotificationCenter defaultCenter] postNotificationName:RodanShouldShowProjectViewNotification
+                                                        object:nil];
 }
 
 - (void)activateProjectView:(CPNotification)aNotification
