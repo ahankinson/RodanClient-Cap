@@ -254,9 +254,6 @@
 			<object class="NSCustomObject" id="661027212">
 				<string key="NSClassName">LoginViewController</string>
 			</object>
-			<object class="NSCustomObject" id="957143462">
-				<string key="NSClassName">WorkflowViewController</string>
-			</object>
 			<object class="NSWindowTemplate" id="56880039">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
@@ -515,7 +512,7 @@
 					<reference key="NSNextKeyView" ref="345923508"/>
 					<string key="NSReuseIdentifierKey">_NS:20</string>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1440, 877}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1440, 900}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
@@ -531,12 +528,6 @@
 			<object class="NSCustomObject" id="273145747">
 				<string key="NSClassName">ProjectController</string>
 			</object>
-			<object class="NSCustomObject" id="403316305">
-				<string key="NSClassName">WorkflowController</string>
-			</object>
-			<object class="NSCustomObject" id="859207533">
-				<string key="NSClassName">ResourceController</string>
-			</object>
 			<object class="NSCustomObject" id="732155626">
 				<string key="NSClassName">NewProjectWindowController</string>
 			</object>
@@ -545,6 +536,15 @@
 			</object>
 			<object class="NSCustomObject" id="581933428">
 				<string key="NSClassName">ProjectViewController</string>
+			</object>
+			<object class="NSCustomObject" id="403316305">
+				<string key="NSClassName">WorkflowController</string>
+			</object>
+			<object class="NSCustomObject" id="957143462">
+				<string key="NSClassName">WorkflowViewController</string>
+			</object>
+			<object class="NSCustomObject" id="859207533">
+				<string key="NSClassName">ResourceController</string>
 			</object>
 			<object class="NSArrayController" id="548181514">
 				<array class="NSMutableArray" key="NSDeclaredKeys">
@@ -1269,17 +1269,6 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">AppController</string>
 					<string key="superclassName">NSObject</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">activateProjectView:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">activateProjectView:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">activateProjectView:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="authenticationController">AuthenticationController</string>
 						<string key="blankApplicationView">NSView</string>
